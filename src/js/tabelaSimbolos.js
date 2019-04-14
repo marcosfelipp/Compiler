@@ -1,57 +1,48 @@
-
 function readFile(that) {
     if (that.files && that.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
             var output = e.target.result;
-
             var output = output.split("\n");
-            
             // for(var i = 0; i< output.length; i++){
             //     alert(output[i]);
             // }
-
-            
         };//end onload()
         reader.readAsText(that.files[0]);
     }//end if html5 filelist support
 }
-
-function No() {
-    var lexema;
-    var token;
-    var tipo = '-';
-    this.setLexema = setLexema;
-    this.setToken = setToken;
-    this.setTipo = setTipo;
-    this.showLexema = getLexema;
-    this.showToken = getToken;
-    this.showTipo = getTipo;
-
-    function getLexema() {
-        alert(lexema);
-    }
-
-    function getToken() {
-        alert(token);
-    }
-
-    function getTipo() {
-        alert(tipo);
-    }
-
-    function setLexema(lex) {
-        lexema = lex;
-    }
-
-    function setToken(tok) {
-        token = tok;
-    }
-
-    function setTipo(tipo) {
-        tipo = tipo;
-    }
-}
+// class Lexema {
+//     constructor() {
+//         var lexema;
+//         var token;
+//         var tipo = '-';
+//         this.setLexema = setLexema;
+//         this.setToken = setToken;
+//         this.setTipo = setTipo;
+//         this.showLexema = getLexema;
+//         this.showToken = getToken;
+//         this.showTipo = getTipo;
+        
+//         function getLexema() {
+//             return lexema
+//         }
+//         function getToken() {
+//             return token
+//         }
+//         function getTipo() {
+//             return tipo
+//         }
+//         function setLexema(lex) {
+//             lexema = lex;
+//         }
+//         function setToken(tok) {
+//             token = tok;
+//         }
+//         function setTipo(tipo) {
+//             tipo = tipo;
+//         }
+//     }
+// }
 
 //http://www.mojavelinux.com/articles/javascript_hashes.html
 
