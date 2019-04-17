@@ -13,9 +13,15 @@
         <div class="container">
             <form>
                 <div class="form-group">
-                    <label>Inserir arquivo</label>
-                    <input type="file" class="form-control-file" id="readFile">
+                    <label>Inserir palavras reservadas:</label>
+                    <input type="file" class="form-control-file" onchange='readFile(this)'>
                 </div>
+
+                <div class="form-group">
+                    <label>Inserir arquivo para compilar:</label>
+                    <input type="file" class="form-control-file" onchange='readProg(this)'>
+                </div>
+
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="sendFile">Compilar!</button>
                 </div>
@@ -27,12 +33,12 @@
 
             <div class="form-group">
                 <label for="exampleFormControlTextarea3">Log</label>
-                <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>
+                <textarea class="form-control" id="log" rows="7"></textarea>
             </div>
     
             <div class="form-group">
-                <label for="exampleFormControlTextarea3">Tokens</label>
-                <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>
+                <label for="exampleFormControlTextarea3">Tabela de Simbolos</label>
+                <textarea class="form-control" id="token" rows="7"></textarea>
             </div>
 
         </div>

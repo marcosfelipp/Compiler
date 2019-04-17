@@ -4,79 +4,113 @@ function readFile(that) {
         reader.onload = function (e) {
             var output = e.target.result;
             var output = output.split("\n");
-            // for(var i = 0; i< output.length; i++){
-            //     alert(output[i]);
-            // }
-        };//end onload()
+            
+            for(i in output){
+                insert_table([output[i], output[i], "-"])
+            }
+            
+        };
         reader.readAsText(that.files[0]);
-    }//end if html5 filelist support
-}
-// class Lexema {
-//     constructor() {
-//         var lexema;
-//         var token;
-//         var tipo = '-';
-//         this.setLexema = setLexema;
-//         this.setToken = setToken;
-//         this.setTipo = setTipo;
-//         this.showLexema = getLexema;
-//         this.showToken = getToken;
-//         this.showTipo = getTipo;
-        
-//         function getLexema() {
-//             return lexema
-//         }
-//         function getToken() {
-//             return token
-//         }
-//         function getTipo() {
-//             return tipo
-//         }
-//         function setLexema(lex) {
-//             lexema = lex;
-//         }
-//         function setToken(tok) {
-//             token = tok;
-//         }
-//         function setTipo(tipo) {
-//             tipo = tipo;
-//         }
-//     }
-// }
-
-//http://www.mojavelinux.com/articles/javascript_hashes.html
-
-function HashTable() {
-
-    this.length = 0;
-    this.nos = new Object();
-
-    /* Adicionando elementos na tabela hash */
-    this.addNo = function (key, value) {
-
-        var no = undefined;
-        if (this.getNo(key)) {
-            no = this.getNo(key);
-        } else {
-            this.nos[key] = value;
-            no = this.nos[key];
-            this.length++;
-        }
-
-        return no;
-    }
-
-    this.getNo = function (key) {
-        return this.nos.hasOwnProperty(key) ? this.nos[key] : undefined;
     }
 }
 
-var tabela = new HashTable();
+function automato(string_lida){
+    var tabela_de_transicao = []
 
-alert(tabela.length);
-tabela.addNo('item', 'item');
-tabela.addNo('kratos', 'kratos');
+    var dic = {
+        "a": 0,
+        "b": 0,
+        "c": 0,
+        "d": 0,
+        "e": 0,
+        "f": 0,
+        "g": 0,
+        "h": 0,
+        "i": 0,
+        "j": 0,
+        "k": 0,
+        "l": 0,
+        "m": 0,
+        "n": 0,
+        "o": 0,
+        "p": 0,
+        "q": 0,
+        "r": 0,
+        "s": 0,
+        "t": 0,
+        "u": 0,
+        "v": 0,
+        "w": 0,
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "0": 1,
+        ".": 2,
+        "^": 3,
+        "+": 4,
+        "-": 4
+    }
+    tabela_de_transicao[[0,0]] = -1;
+    tabela_de_transicao[[0,1]] = 1;
 
-for (k in tabela.nos) {
-    alert(tabela.nos[k] + ' == ' + k);
+    tabela_de_transicao[[1,0]] = -1;
+    tabela_de_transicao[[1,1]] = 1; //Aceitacao
+    tabela_de_transicao[[1,2]] = 2
+
+    tabela_de_transicao[[2,0]] = -1
+    tabela_de_transicao[[2,1]] = 3
+
+    tabela_de_transicao[[3,0]] = -1
+    tabela_de_transicao[[3,1]] = 3 //Aceitacao
+    tabela_de_transicao[[3,2]] = -1 //Rejeicao
+    tabela_de_transicao[[3,3]] = 4
+
+    tabela_de_transicao[[4,0]] = -1
+    tabela_de_transicao[[4,1]] = 6
+    tabela_de_transicao[[4,2]] = -1
+    tabela_de_transicao[[4,3]] = -1
+    tabela_de_transicao[[4,4]] = 5
+
+    tabela_de_transicao[[5,0]] = -1
+    tabela_de_transicao[[5,1]] = 6
+
+    tabela_de_transicao[[6,0]] = -1
+    tabela_de_transicao[[6,1]] = 6 //Aceitacao
+
+    var i = 0
+    var state = 0
+    while(string_lida[i] != undefined && state != -1){
+        state = tabela_de_transicao[[state,dic[string_lida[i]]]]
+        console.log(state);
+        i += 1;
+    }
+
+    if(state == 1){
+        return [string_lida, "num", "-"]
+    }
+
 }
+console.log(automato("<-"))
+
+// Ler simbolo por simbolo
+// Enquanto rejeitar, rejeite
+// Se aceitar, armazene a tupla e continue
+//      Se aceitar, armazene a tupla e continue
+//      Se rejeitar, adicione na tabela e volte um simbolo e continue
+
+tabela_de_simbolos = {}
+
+
+function insert_table(tupla){
+    tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
+}
+
