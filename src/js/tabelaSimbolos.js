@@ -6,7 +6,7 @@ function readFile(that) {
             var output = output.split("\n");
             
             for(i in output){
-                insert_table([output[i], output[i], "-"])
+                inserir_tabela_simbolo([output[i], output[i], "-"])
             }
             
         };
@@ -17,6 +17,7 @@ function readFile(that) {
 function automato(string_lida){
     var tabela_de_transicao = []
 
+    // TODO: Adicionar outros símobolos
     var dic = {
         "a": 0,
         "b": 0,
@@ -59,6 +60,9 @@ function automato(string_lida){
         "+": 4,
         "-": 4
     }
+
+    // TODO: Adicionar as outras transições:
+
     tabela_de_transicao[[0,0]] = -1;
     tabela_de_transicao[[0,1]] = 1;
 
@@ -94,23 +98,81 @@ function automato(string_lida){
         i += 1;
     }
 
-    if(state == 1){
+    if(state == 1 || state == 3 || state == 6){
         return [string_lida, "num", "-"]
     }
+    else{
+        return [string_lida, "ERRO", "-"]
+    }
+
+
 
 }
-console.log(automato("<-"))
 
-// Ler simbolo por simbolo
-// Enquanto rejeitar, rejeite
-// Se aceitar, armazene a tupla e continue
-//      Se aceitar, armazene a tupla e continue
-//      Se rejeitar, adicione na tabela e volte um simbolo e continue
-
-tabela_de_simbolos = {}
-
-
-function insert_table(tupla){
+function inserir_tabela_simbolo(tupla){
     tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
 }
 
+// ALORITMO:
+// Ler simbolo por simbolo
+// Enquanto rejeitar, rejeite
+// Se aceitar, armazene a tupla e continue
+// Se aceitar novamente, armazene a tupla e continue
+// Se rejeitar, adicione na tabela e volte um simbolo e continue
+
+function addLexemas(line){
+    i = 0
+    lex = ''
+
+    while(line[i] != '\n'){
+        lex += line[i]
+
+        // TODO: Verificar se string já se encontra na tabela de simbolos
+
+        retorno = automato(lex)
+        console.log(retorno)
+
+        if(retorno[1] != "ERRO" && line[i+1] == " "){
+            inserir_tabela_simbolo(retorno)
+            lex = ''
+            i+=2
+            continue
+        }
+
+        if(retorno[1] != "ERRO" && line[i+1] == "\n"){
+            inserir_tabela_simbolo(retorno)
+            return
+        }
+
+        if(retorno[1] != "ERRO"){
+            tupla_atual = retorno
+            i+=1
+            continue
+        }
+        if(retorno[1] == "ERRO" && lex != ''){
+            inserir_tabela_simbolo(retorno)
+            lex = ''
+            i-=1
+            continue
+        }
+        if(line[i+1] == '\n' && retorno[1] == "ERRO"){
+            console.log("ERRO")
+            return
+        }
+
+        if(retorno[1] == "ERRO" && line[i+1] == " "){
+            console.log("ERRO ESPACO")
+            return
+        }
+         
+    }
+}
+
+
+tabela_de_simbolos = {}
+
+// Fazer isso para cada linha do arquivo:
+addLexemas('12345\n')
+
+
+console.log(tabela_de_simbolos)
