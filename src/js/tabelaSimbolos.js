@@ -6,10 +6,8 @@ function readProg(that) {
             var output = output.split("\n");
 
             for (linha in output) {
-                // console.log(output[i])
                 addLexemas(output[linha] + '\r', linha)
             }
-            //console.log(tabela_de_simbolos)
             log_simbolos()
         };
         reader.readAsText(that.files[0]);
@@ -58,7 +56,7 @@ function automato(string_lida) {
 
         i += 1;
     }
-
+    //Estado em que o automato parou:
     if (state == 1 || state == 3 || state == 6) {
         return [string_lida, "Num", "-"]
     }
@@ -110,13 +108,12 @@ function addLexemas(strig_lida, linha) {
     tupla_atual = []
     while (strig_lida[i] != '\r') {
         lex += strig_lida[i]
-
         // Verifica se está na tabela de simbolos:
         if (tabela_de_simbolos[lex] != undefined) {
-            //console.log('já está na tabela')
             if (strig_lida[i+1] == ' '){
                 lex = ''
                 i += 2
+                tupla_atual = []
                 continue
             }
             if(strig_lida[i+1] == '\r'){
@@ -127,6 +124,7 @@ function addLexemas(strig_lida, linha) {
             //console.log(retorno)
             if (retorno[1] != 'id') {
                 lex = ''
+                tupla_atual = []
                 i += 1
                 continue
             } else {
@@ -157,6 +155,7 @@ function addLexemas(strig_lida, linha) {
         
         if (retorno[1] == "ERRO") {
             if (tupla_atual.length != 0) {
+
                 inserir_tabela_simbolo(tupla_atual)
                 tupla_atual = []
                 lex = ''
