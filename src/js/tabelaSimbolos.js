@@ -2,30 +2,59 @@ function readProg(that) {
     if (that.files && that.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            var output = e.target.result;
-            var output = output.split("\n");
+            output = e.target.result;
+            output = output.split("\n");
 
-            for (linha in output) {
-                // console.log(output[i])
-                addLexemas(output[linha] + '\r', linha)
-            }
-            //console.log(tabela_de_simbolos)
-            log_simbolos()
         };
         reader.readAsText(that.files[0]);
     }
 }
 
-function log_simbolos() {
-    texto = ''
-    for (simbolo in tabela_de_simbolos) {
-        texto += "Lexema: " + tabela_de_simbolos[simbolo][0] + '\t' + "token: " + tabela_de_simbolos[simbolo][1] + '\t' + "tipo: " + tabela_de_simbolos[simbolo][2]
-        texto += '\n'
-    }
-    document.getElementById("token").value = texto
+/* Inserindo tuplas na tabela de visualização */
+function inserir_tabela_view(tupla) {
+
+    var table = document.getElementById('table-tokens')
+    var row = document.createElement('tr');
+    var cell_lexema = document.createElement('td');
+    var cell_token = document.createElement('td');
+    var cell_tipo = document.createElement('td');
+
+    cell_lexema.innerText = tupla[0];
+    cell_token.innerText = tupla[1];
+    cell_tipo.innerText = tupla[2];
+    row.appendChild(cell_lexema);
+    row.appendChild(cell_token);
+    row.appendChild(cell_tipo);
+    table.tBodies[0].appendChild(row);
 }
 
-function log_erros(linha, coluna){
+/* Movimentar barra de progresso e mostrar a tabela de tokens gerada */
+function compilar() {
+
+    // limpar o conteúdo do log de erros sempre que clicar em compilar
+    document.getElementById('log_erro').value = ''
+    
+    var element = document.getElementById("myprogressBar");
+    var width = 1;
+    var identity = setInterval(scene, 25);
+
+    function scene() {
+        if (width >= 100) {
+            clearInterval(identity);
+            for (linha in output) {
+                // console.log(output[i])
+                addLexemas(output[linha] + '\r', linha)
+            }
+        } else {
+            width++;
+            element.style.width = width + '%';
+            element.innerText = width + '%';
+        }
+    }
+
+}
+
+function log_erros(linha, coluna) {
     texto = document.getElementById("log_erro").value
     texto += "ERRO NA LINHA " + linha + ", COLUNA " + coluna + '\n'
 
@@ -94,13 +123,16 @@ function automato(string_lida) {
     }
     else if (state == 23) {
         return [string_lida, "PT_V", "-"]
-    }else {
+    } else {
         return [string_lida, "ERRO", "-"]
     }
 }
 
+/* A cada tupla inserida na tabela de simbolos, também se insere a mesma tupla 
+    na tabela de visualização */
 function inserir_tabela_simbolo(tupla) {
     tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
+    inserir_tabela_view(tupla)
 }
 
 function addLexemas(strig_lida, linha) {
@@ -114,12 +146,12 @@ function addLexemas(strig_lida, linha) {
         // Verifica se está na tabela de simbolos:
         if (tabela_de_simbolos[lex] != undefined) {
             //console.log('já está na tabela')
-            if (strig_lida[i+1] == ' '){
+            if (strig_lida[i + 1] == ' ') {
                 lex = ''
                 i += 2
                 continue
             }
-            if(strig_lida[i+1] == '\r'){
+            if (strig_lida[i + 1] == '\r') {
                 return
             }
             // Porem pode ser um id:
@@ -154,24 +186,24 @@ function addLexemas(strig_lida, linha) {
             i += 1
             continue
         }
-        
+
         if (retorno[1] == "ERRO") {
             if (tupla_atual.length != 0) {
                 inserir_tabela_simbolo(tupla_atual)
                 tupla_atual = []
                 lex = ''
             } else {
-                if(strig_lida[i+1] == ' ' && lex[0] != '\"'){
+                if (strig_lida[i + 1] == ' ' && lex[0] != '\"') {
                     log_erros(linha, i)
                     lex = ''
                     i += 2
                     continue
-                }   
-                if(strig_lida[i+1] == '\r'){
+                }
+                if (strig_lida[i + 1] == '\r') {
                     log_erros(linha, i)
                     return
                 }
-                i+=1
+                i += 1
             }
         }
 
@@ -181,6 +213,7 @@ function addLexemas(strig_lida, linha) {
 var alphabet = ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").split("");
 var numbers = ("0123456789")
 var dic = {}
+var output;
 
 for (i in alphabet) {
     dic[alphabet[i]] = 0
