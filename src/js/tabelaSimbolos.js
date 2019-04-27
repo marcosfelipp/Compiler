@@ -33,7 +33,7 @@ function compilar() {
 
     // limpar o conteúdo do log de erros sempre que clicar em compilar
     document.getElementById('log_erro').value = ''
-    
+
     var element = document.getElementById("myprogressBar");
     var width = 1;
     var identity = setInterval(scene, 25);
@@ -42,7 +42,6 @@ function compilar() {
         if (width >= 100) {
             clearInterval(identity);
             for (linha in output) {
-                // console.log(output[i])
                 addLexemas(output[linha] + '\r', linha)
             }
         } else {
@@ -144,7 +143,6 @@ function addLexemas(strig_lida, linha) {
         lex += strig_lida[i]
         // Verifica se está na tabela de simbolos:
         if (tabela_de_simbolos[lex] != undefined) {
-            //console.log('já está na tabela')
             if (strig_lida[i + 1] == ' ') {
                 lex = ''
                 i += 2
