@@ -3,8 +3,8 @@ function readProg(that) {
         var reader = new FileReader();
         reader.onload = function (e) {
             output = e.target.result;
-            output = output.split("\n");
-
+            console.log(output)
+            //output = output.split("\n");
         };
         reader.readAsText(that.files[0]);
     }
@@ -12,7 +12,6 @@ function readProg(that) {
 
 /* Inserindo tuplas na tabela de visualização */
 function inserir_tabela_view(tupla) {
-
     var table = document.getElementById('table-tokens')
     var row = document.createElement('tr');
     var cell_lexema = document.createElement('td');
@@ -37,13 +36,11 @@ function compilar() {
     var element = document.getElementById("myprogressBar");
     var width = 1;
     var identity = setInterval(scene, 25);
-
     function scene() {
         if (width >= 100) {
             clearInterval(identity);
-            for (linha in output) {
-                addLexemas(output[linha] + '\r', linha)
-            }
+            addLexemas(output)
+            console.log(tabela_de_simbolos)
         } else {
             width++;
             element.style.width = width + '%';
@@ -59,6 +56,7 @@ function log_erros(linha, coluna) {
 
     document.getElementById("log_erro").value = texto
 }
+
 
 function automato(string_lida) {
 
@@ -131,31 +129,40 @@ function automato(string_lida) {
     na tabela de visualização */
 function inserir_tabela_simbolo(tupla) {
     tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
-    inserir_tabela_view(tupla)
+    //inserir_tabela_view(tupla)
 }
 
-function addLexemas(strig_lida, linha) {
+function lexico(lexema) {
+    return tabela_de_simbolos[lexema]
+}
+
+function addLexemas(string_lida) {
 
     i = 0
     lex = ''
     tupla_atual = []
-    while (strig_lida[i] != '\r') {
-        lex += strig_lida[i]
-        // Verifica se está na tabela de simbolos:
+
+    /* Ler espaços, tabulações e pular linha, porém ignorar */
+    while (string_lida[i] != undefined) {
+        lex += string_lida[i]
+
+        if (lex == ' ' || lex == '\t' || lex == '\n') {
+
+            lex = ''
+            tupla_atual = []
+            i += 1
+            //inserir_tabela_view(retorno = automato(lex)) Verificar se é preciso mostrar na tela
+            continue
+        }
+
+        /* Símbolos que já estão na tabela de simbolos */
         if (tabela_de_simbolos[lex] != undefined) {
-            if (strig_lida[i + 1] == ' ') {
-                lex = ''
-                i += 2
-                tupla_atual = []
-                continue
-            }
-            if (strig_lida[i + 1] == '\r') {
-                return
-            }
+
             // Porem pode ser um id:
-            retorno = automato(lex + strig_lida[i + 1])
+            retorno = automato(lex + string_lida[i + 1])
             //console.log(retorno)
             if (retorno[1] != 'id') {
+                inserir_tabela_view(tabela_de_simbolos[lex])
                 lex = ''
                 tupla_atual = []
                 i += 1
@@ -164,23 +171,37 @@ function addLexemas(strig_lida, linha) {
                 i += 1
                 continue
             }
-
         }
 
         retorno = automato(lex)
 
+        /* Tratamento para numeros seguidos de '.' ou '^' */
+        if (retorno[1] == 'Num') {
+            if (string_lida[i + 1] == '.' || string_lida[i + 1] == '^') {
+                lex += string_lida[i + 1]
+                i += 2
+                continue
+            }
+        }
+
         if (retorno[1] != "ERRO") {
             tupla_atual = retorno
-            if (strig_lida[i + 1] == " ") {
-                inserir_tabela_simbolo(tupla_atual)
+            if (string_lida[i + 1] == ' ' || string_lida[i + 1] == '\n'
+                || string_lida[i + 1] == '\t') {
+
+                //Se o lexema nao existir na tabela e for identificador, inserir e mostrar
+                if (tupla_atual[1] == 'id') {
+                    inserir_tabela_simbolo(tupla_atual)
+                    inserir_tabela_view(tupla_atual)
+                    //mostrar o que foi inserido
+                } else { // Caso seja diferente de indentificador so mostrar na tela
+                    inserir_tabela_view(tupla_atual)
+                }
+
                 tupla_atual = []
                 lex = ''
                 i += 2
                 continue
-            } if (strig_lida[i + 1] == '\r') {
-                inserir_tabela_simbolo(tupla_atual)
-                tupla_atual = []
-                return
             }
             i += 1
             continue
@@ -189,18 +210,26 @@ function addLexemas(strig_lida, linha) {
         if (retorno[1] == "ERRO") {
             if (tupla_atual.length != 0) {
 
-                inserir_tabela_simbolo(tupla_atual)
+                //Se o lexema nao existir na tabela e for identificador, inserir e mostrar
+                if (tupla_atual[1] == 'id') {
+                    inserir_tabela_simbolo(tupla_atual)
+                    //mostrar o que foi inserido
+                } else { // Caso seja diferente de indentificador so mostrar na tela
+                    inserir_tabela_view(tupla_atual)
+                }
+
                 tupla_atual = []
                 lex = ''
-            } else {
-                if (strig_lida[i + 1] == ' ' && lex[0] != '\"') {
+
+            } else { //todo olhar a respota com erros
+                if (string_lida[i + 1] == ' ' && lex[0] != '\"') {
                     log_erros(linha, i)
                     lex = ''
                     i += 2
                     continue
                 }
-                if (strig_lida[i + 1] == '\r') {
-                    log_erros(linha, i)
+                if (string_lida[i + 1] == '\r') {
+                    //log_erros(linha, i)
                     return
                 }
                 i += 1
