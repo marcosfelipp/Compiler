@@ -6,7 +6,7 @@ D inteiro;
 C real;
 varfim;
 escreva "Digite B";
-leia B;
+leia B;&
 escreva "Digite A:";
 leia A;
 se(B>2)

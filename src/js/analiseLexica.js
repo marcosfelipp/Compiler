@@ -3,8 +3,6 @@ function readProg(that) {
         var reader = new FileReader();
         reader.onload = function (e) {
             output = e.target.result;
-            console.log(output)
-            //output = output.split("\n");
         };
         reader.readAsText(that.files[0]);
     }
@@ -53,17 +51,20 @@ function compilar() {
 function log_erros(linha, coluna) {
     texto = document.getElementById("log_erro").value
     texto += "ERRO NA LINHA " + linha + ", COLUNA " + coluna + '\n'
-
     document.getElementById("log_erro").value = texto
 }
 
 
 function automato(string_lida) {
-
     var i = 0
     var state = 0
 
     while (string_lida[i] != undefined && state != undefined) {
+
+        // Captura o erro de caractere invalido
+        if (dic[string_lida[i]] == undefined){
+            log_erros('1', '2')
+        }
 
         state = tabela_de_transicao[[state, dic[string_lida[i]]]]
 
@@ -84,52 +85,16 @@ function automato(string_lida) {
 
         i += 1;
     }
-    //Estado em que o automato parou:
-    if (state == 1 || state == 3 || state == 6) {
-        return [string_lida, "Num", "-"]
-    }
-    else if (state == 8) {
-        return [string_lida, "Literal", "-"]
-    }
-    else if (state == 9) {
-        return [string_lida, "id", "-"]
-    }
-    else if (state == 11) {
-        return [string_lida, "Comentário", "-"]
-    }
-    else if (state == 12) {
-        return [string_lida, "Tab|Salto|Espaço", "-"]
-    }
-    else if (state == 13) {
-        return [string_lida, "EOF", "-"]
-    }
-    else if (state == 14 || state == 15 || state == 16 || state == 17 || state == 18) {
-        return [string_lida, "OPR", "-"]
-    }
-    else if (state == 19) {
-        return [string_lida, "RCB", "-"]
-    }
-    else if (state == 20) {
-        return [string_lida, "OPM", "-"]
-    }
-    else if (state == 21) {
-        return [string_lida, "AB_P", "-"]
-    }
-    else if (state == 22) {
-        return [string_lida, "FC_P", "-"]
-    }
-    else if (state == 23) {
-        return [string_lida, "PT_V", "-"]
-    } else {
-        return [string_lida, "ERRO", "-"]
-    }
+    
+    
+
+    return [string_lida, final_states[state], "-" ]
+
 }
 
-/* A cada tupla inserida na tabela de simbolos, também se insere a mesma tupla 
-    na tabela de visualização */
+
 function inserir_tabela_simbolo(tupla) {
     tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
-    //inserir_tabela_view(tupla)
 }
 
 function lexico(lexema) {
@@ -184,7 +149,7 @@ function addLexemas(string_lida) {
             }
         }
 
-        if (retorno[1] != "ERRO") {
+        if (retorno[1] != undefined) {
             tupla_atual = retorno
             if (string_lida[i + 1] == ' ' || string_lida[i + 1] == '\n'
                 || string_lida[i + 1] == '\t') {
@@ -207,7 +172,7 @@ function addLexemas(string_lida) {
             continue
         }
 
-        if (retorno[1] == "ERRO") {
+        if (retorno[1] == undefined) {
             if (tupla_atual.length != 0) {
 
                 //Se o lexema nao existir na tabela e for identificador, inserir e mostrar
@@ -239,97 +204,6 @@ function addLexemas(string_lida) {
     }
 }
 
-var alphabet = ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").split("");
-var numbers = ("0123456789")
-var dic = {}
-var output;
-
-for (i in alphabet) {
-    dic[alphabet[i]] = 0
-}
-
-for (i in numbers) {
-    dic[numbers[i]] = 1
-}
-
-dic['.'] = 2
-dic['^'] = 3
-dic['+'] = 4
-dic['-'] = 4
-dic['*'] = 4
-dic['/'] = 4
-dic['\"'] = 5
-dic['_'] = 6
-dic['{'] = 7
-dic['}'] = 8
-dic[' '] = 11
-dic['<'] = 13
-dic['>'] = 14
-dic['='] = 15
-dic['('] = 16
-dic[')'] = 17
-dic[';'] = 18
-
-var tabela_de_transicao = []
-
-var tabela_de_simbolos = {}
-
-//Transições para num
-tabela_de_transicao[[0, 1]] = 1;
-
-tabela_de_transicao[[1, 1]] = 1; //Aceitacao
-tabela_de_transicao[[1, 2]] = 2
-tabela_de_transicao[[1, 3]] = 4
-
-tabela_de_transicao[[2, 1]] = 3
-
-tabela_de_transicao[[3, 1]] = 3 //Aceitacao
-tabela_de_transicao[[3, 3]] = 4
-
-tabela_de_transicao[[4, 1]] = 6
-tabela_de_transicao[[4, 4]] = 5
-
-tabela_de_transicao[[5, 1]] = 6
-
-tabela_de_transicao[[6, 1]] = 6 //Aceitacao
-
-//Transições para literal
-tabela_de_transicao[[0, 5]] = 7
-tabela_de_transicao[[7, 5]] = 8 //Aceitacao
-
-//Transições para identificador
-tabela_de_transicao[[0, 0]] = 9 //Aceitacao
-tabela_de_transicao[[9, 0]] = 9 //Aceitacao
-tabela_de_transicao[[9, 1]] = 9 //Aceitacao
-tabela_de_transicao[[9, 6]] = 9 //Aceitacao
-
-//Transições para comentario
-tabela_de_transicao[[0, 7]] = 10
-tabela_de_transicao[[10, 8]] = 11 //Aceitacao
-
-//Transições para Operadores Relacionais < 13, > 14, = 15
-tabela_de_transicao[[0, 13]] = 14  //Aceitação
-tabela_de_transicao[[0, 15]] = 18  //Aceitação
-tabela_de_transicao[[14, 14]] = 15  //Aceitação
-tabela_de_transicao[[0, 14]] = 16  //Aceitação
-tabela_de_transicao[[14, 15]] = 17  //Aceitação
-tabela_de_transicao[[16, 15]] = 17  //Aceitação
-
-//Transições para Atribuições
-tabela_de_transicao[[0, 13]] = 14  //Aceitação
-tabela_de_transicao[[14, 4]] = 19  //Aceitação
-
-//Transições para Operadores Aritméticos (+,-,*,/)
-tabela_de_transicao[[0, 4]] = 20  //Aceitação
-
-//Transições para Abre parenteses
-tabela_de_transicao[[0, 16]] = 21  //Aceitação
-
-//Transições para fecha parenteses
-tabela_de_transicao[[0, 17]] = 22  //Aceitação
-
-//Transições para ponto e vírgula (;)
-tabela_de_transicao[[0, 18]] = 23  //Aceitação
 
 // Trocar posições com -1 para undefined ou seja nao colocar
 
