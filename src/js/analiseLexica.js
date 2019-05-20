@@ -30,7 +30,7 @@ function compilar() {
 
     // limpar o conteúdo do log de erros sempre que clicar em compilar
     document.getElementById('log_erro').value = ''
-
+    document.getElementById('table-token-body').innerText = ''
     var element = document.getElementById("myprogressBar");
     var width = 1;
     var identity = setInterval(scene, 25);
@@ -85,8 +85,6 @@ function automato(string_lida) {
 
         i += 1;
     }
-    
-    
 
     return [string_lida, final_states[state], "-" ]
 
@@ -144,6 +142,7 @@ function addLexemas(string_lida) {
         if (retorno[1] == 'Num') {
             if (string_lida[i + 1] == '.' || string_lida[i + 1] == '^') {
                 lex += string_lida[i + 1]
+                console.log(lex)
                 i += 2
                 continue
             }
@@ -188,7 +187,7 @@ function addLexemas(string_lida) {
 
             } else { //todo olhar a respota com erros
                 if (string_lida[i + 1] == ' ' && lex[0] != '\"') {
-                    log_erros(linha, i)
+                    // log_erros(linha, i)
                     lex = ''
                     i += 2
                     continue

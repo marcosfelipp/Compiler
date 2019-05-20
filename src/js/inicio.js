@@ -90,9 +90,9 @@ dic[')'] = 17
 dic[';'] = 18
 
 const final_states = {
-    1: 'num',
-    3: 'num',
-    6: 'num',
+    1: 'Num',
+    3: 'Num',
+    6: 'Num',
     8: 'Literal',
     9: 'id',
     11: 'Comentário',
