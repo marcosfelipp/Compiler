@@ -2,7 +2,7 @@ function readProg(that) {
     if (that.files && that.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            output = e.target.result;
+            string_lida = e.target.result + '$';
         };
         reader.readAsText(that.files[0]);
     }
@@ -37,8 +37,11 @@ function compilar() {
     function scene() {
         if (width >= 100) {
             clearInterval(identity);
-            addLexemas(output)
-            console.log(tabela_de_simbolos)
+            while(proximoToken() != 'FIM'){
+                console.log(pos_ponteiro)
+            }
+            
+            console.log(tabela_de_simbolos);
         } else {
             width++;
             element.style.width = width + '%';
@@ -62,7 +65,7 @@ function automato(string_lida) {
     while (string_lida[i] != undefined && state != undefined) {
 
         // Captura o erro de caractere invalido
-        if (dic[string_lida[i]] == undefined){
+        if (dic[string_lida[i]] == undefined) {
             log_erros('1', '2')
         }
 
@@ -86,7 +89,7 @@ function automato(string_lida) {
         i += 1;
     }
 
-    return [string_lida, final_states[state], "-" ]
+    return [string_lida, final_states[state], "-"]
 
 }
 
@@ -94,117 +97,6 @@ function automato(string_lida) {
 function inserir_tabela_simbolo(tupla) {
     tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
 }
-
-function lexico(lexema) {
-    return tabela_de_simbolos[lexema]
-}
-
-function addLexemas(string_lida) {
-
-    i = 0
-    lex = ''
-    tupla_atual = []
-
-    /* Ler espaços, tabulações e pular linha, porém ignorar */
-    while (string_lida[i] != undefined) {
-        lex += string_lida[i]
-
-        if (lex == ' ' || lex == '\t' || lex == '\n') {
-
-            lex = ''
-            tupla_atual = []
-            i += 1
-            //inserir_tabela_view(retorno = automato(lex)) Verificar se é preciso mostrar na tela
-            continue
-        }
-
-        /* Símbolos que já estão na tabela de simbolos */
-        if (tabela_de_simbolos[lex] != undefined) {
-
-            // Porem pode ser um id:
-            retorno = automato(lex + string_lida[i + 1])
-            //console.log(retorno)
-            if (retorno[1] != 'id') {
-                inserir_tabela_view(tabela_de_simbolos[lex])
-                lex = ''
-                tupla_atual = []
-                i += 1
-                continue
-            } else {
-                i += 1
-                continue
-            }
-        }
-
-        retorno = automato(lex)
-
-        /* Tratamento para numeros seguidos de '.' ou '^' */
-        if (retorno[1] == 'Num') {
-            if (string_lida[i + 1] == '.' || string_lida[i + 1] == '^') {
-                lex += string_lida[i + 1]
-                console.log(lex)
-                i += 2
-                continue
-            }
-        }
-
-        if (retorno[1] != undefined) {
-            tupla_atual = retorno
-            if (string_lida[i + 1] == ' ' || string_lida[i + 1] == '\n'
-                || string_lida[i + 1] == '\t') {
-
-                //Se o lexema nao existir na tabela e for identificador, inserir e mostrar
-                if (tupla_atual[1] == 'id') {
-                    inserir_tabela_simbolo(tupla_atual)
-                    inserir_tabela_view(tupla_atual)
-                    //mostrar o que foi inserido
-                } else { // Caso seja diferente de indentificador so mostrar na tela
-                    inserir_tabela_view(tupla_atual)
-                }
-
-                tupla_atual = []
-                lex = ''
-                i += 2
-                continue
-            }
-            i += 1
-            continue
-        }
-
-        if (retorno[1] == undefined) {
-            if (tupla_atual.length != 0) {
-
-                //Se o lexema nao existir na tabela e for identificador, inserir e mostrar
-                if (tupla_atual[1] == 'id') {
-                    inserir_tabela_simbolo(tupla_atual)
-                    //mostrar o que foi inserido
-                } else { // Caso seja diferente de indentificador so mostrar na tela
-                    inserir_tabela_view(tupla_atual)
-                }
-
-                tupla_atual = []
-                lex = ''
-
-            } else { //todo olhar a respota com erros
-                if (string_lida[i + 1] == ' ' && lex[0] != '\"') {
-                    // log_erros(linha, i)
-                    lex = ''
-                    i += 2
-                    continue
-                }
-                if (string_lida[i + 1] == '\r') {
-                    //log_erros(linha, i)
-                    return
-                }
-                i += 1
-            }
-        }
-
-    }
-}
-
-
-// Trocar posições com -1 para undefined ou seja nao colocar
 
 inserir_tabela_simbolo(["inicio", "inicio", "-"])
 inserir_tabela_simbolo(["varinicio", "varinicio", "-"])
@@ -218,5 +110,3 @@ inserir_tabela_simbolo(["fim", "fim", "-"])
 inserir_tabela_simbolo(["inteiro", "inteiro", "-"])
 inserir_tabela_simbolo(["lit", "lit", "-"])
 inserir_tabela_simbolo(["real", "real", "-"])
-
-console.log(tabela_de_simbolos)

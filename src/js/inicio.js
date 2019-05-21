@@ -1,22 +1,17 @@
+// ANALISADOR LÉXICO:
 var tabela_de_transicao = []
 var tabela_de_simbolos = {}
 
 tabela_de_transicao[[0, 1]] = 1;
-
 tabela_de_transicao[[1, 1]] = 1; //Aceitacao
 tabela_de_transicao[[1, 2]] = 2
 tabela_de_transicao[[1, 3]] = 4
-
 tabela_de_transicao[[2, 1]] = 3
-
 tabela_de_transicao[[3, 1]] = 3 //Aceitacao
 tabela_de_transicao[[3, 3]] = 4
-
 tabela_de_transicao[[4, 1]] = 6
 tabela_de_transicao[[4, 4]] = 5
-
 tabela_de_transicao[[5, 1]] = 6
-
 tabela_de_transicao[[6, 1]] = 6 //Aceitacao
 
 //Transições para literal
@@ -109,3 +104,11 @@ const final_states = {
     22: 'FC_P',
     23: 'PT_V'
 }
+
+// ANALISADOR SINTÁTICO:
+
+pilha = []
+ACTION = []
+
+pos_ponteiro = 0
+string_lida = undefined
