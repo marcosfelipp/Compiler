@@ -108,8 +108,9 @@ const final_states = {
 // ANALISADOR SINTÁTICO:
 
 pilha = []
-ACTION = []
 var tabela_sintatica
+
+var tabela_de_transicao_de_estados = []
 
 pos_ponteiro = 0
 string_lida = undefined

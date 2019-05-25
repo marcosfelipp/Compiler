@@ -1,9 +1,9 @@
 function removeElementoPilha() {
-
+    return pilha.pop()
 }
 
-function insereElementoPilha() {
-
+function insereElementoPilha(elemento) {
+    pilha.push(elemento)
 }
 
 function proximoToken() {
@@ -71,7 +71,7 @@ function proximoToken() {
 
         if (retorno[1] == undefined) {
             if (tupla_atual.length != 0) {
-                //Se o lexema nao existir na tabela e for identificador, inserir e mostrar
+                // Se o lexema nao existir na tabela e for identificador, inserir e mostrar
                 if (tupla_atual[1] == 'id') {
                     inserir_tabela_simbolo(tupla_atual)
                 } else {
@@ -94,19 +94,28 @@ function proximoToken() {
     }
 }
 
-// function analiseLR(programa){
-//     a = proximoToken()
-//     while(1){
-//         s = removeElementoPilha()
-//         if(ACTION[s,a] == 'shift t'){
-//             insereElementoPilha(t)
-//             a = proximoToken()
-//         }else if(ACTION[s,a] == 'reduce A->B'){
-//             // Desempilhar simbolos |B| da pilha
-//             // Faça estado t ser o topo da pilha
-//             insereElementoPilha()
+function analiseLR(){
+    insereElementoPilha("$")
+    a = proximoToken()
 
-//         }
+    while(1){
+        s = removeElementoPilha()    
+        
+        if(a == 'FIM'){
+            console.log("TERMINADA")
+            return
+        }
 
-//     }
-// }
+        // s = removeElementoPilha()
+        // if(tabela_de_transicao_de_estados[s,a] == 'shift t'){
+        //     insereElementoPilha(t)
+        //     a = proximoToken()
+        // }else if(tabela_de_transicao_de_estados[s,a] == 'reduce A->B'){
+        //     // Desempilhar simbolos |B| da pilha
+        //     // Faça estado t ser o topo da pilha
+        //     insereElementoPilha()
+
+        // }
+
+    }
+}
