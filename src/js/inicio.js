@@ -661,8 +661,46 @@ tabela_sintatica = {
     [[76, 'enquanto']]: 'R37',
 }
 
-/* for(k in tabela_sintatica){
-    console.log(tabela_sintatica[k])
-} */
+var nao_terminais_reducao = {
+
+    1: 'P\'',
+    2: 'P',
+    3: 'V',
+    4: 'LV',
+    5: 'LV',
+    6: 'D',
+    7: 'TIPO',
+    8: 'TIPO',
+    9: 'TIPO',
+    10: 'A',
+    11: 'ES',
+    12: 'ES',
+    13: 'ARG',
+    14: 'ARG',
+    15: 'ARG',
+    16: 'A',
+    17: 'CMD',
+    18: 'LD',
+    19: 'LD',
+    20: 'OPRD', 
+    21: 'OPRD',
+    22: 'A',
+    23: 'COND',
+    24: 'CABECALHO',
+    25: 'EXP_R',
+    26: 'CORPO',
+    27: 'CORPO',
+    28: 'CORPO',
+    29: 'CORPO',
+    30: 'A',
+    31: 'CORPO',
+    32: 'A',
+    33: 'ER',
+    34: 'CORPO_ER',
+    35: 'CORPO_ER',
+    36: 'CORPO_ER',
+    37: 'CORPO_ER',
+    38: 'CORPO_ER',
+}
 
 console.log(tabela_sintatica[[0, 'inicio']])

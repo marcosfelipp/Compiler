@@ -6,6 +6,10 @@ function insereElementoPilha(elemento) {
     pilha.push(elemento)
 }
 
+function topoPilha(){
+    return pilha[pilha.length - 1]
+}
+
 function proximoToken() {
     lex = ''
     tupla_atual = []
@@ -95,27 +99,31 @@ function proximoToken() {
 }
 
 function analiseLR(){
-    insereElementoPilha("$")
+    
+    insereElementoPilha(0)
     a = proximoToken()
 
     while(1){
-        s = removeElementoPilha()    
+        /* s = removeElementoPilha()    
         
         if(a == 'FIM'){
             console.log("TERMINADA")
             return
+        } */
+
+        s = topoPilha() //Estado no topo da pilha
+        acao = tabela_sintatica[[s,a]] // Pegando acao correspondente na tabela sintatica
+
+        if(acao.indexOf('S') != -1){
+            insereElementoPilha(parseInt(acao.split('S')[1]))
+            a = proximoToken()
+        }else if(acao.indexOf('R') != -1){
+            // Desempilhar simbolos |B| da pilha
+            // Faça estado t ser o topo da pilha
+            removeElementoPilha()
+            insereElementoPilha(topoPilha(),nao_terminais_reducao[acao.split('R')[1]])
+
         }
-
-        // s = removeElementoPilha()
-        // if(tabela_de_transicao_de_estados[s,a] == 'shift t'){
-        //     insereElementoPilha(t)
-        //     a = proximoToken()
-        // }else if(tabela_de_transicao_de_estados[s,a] == 'reduce A->B'){
-        //     // Desempilhar simbolos |B| da pilha
-        //     // Faça estado t ser o topo da pilha
-        //     insereElementoPilha()
-
-        // }
 
     }
 }
