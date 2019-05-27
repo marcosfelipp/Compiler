@@ -6,7 +6,7 @@ function insereElementoPilha(elemento) {
     pilha.push(elemento)
 }
 
-function topoPilha(){
+function topoPilha() {
     return pilha[pilha.length - 1]
 }
 
@@ -38,6 +38,9 @@ function proximoToken() {
                 continue
             } else {
                 inserir_tabela_view(tabela_de_simbolos[lex])
+                /* Precisa fazer o retorno pegar a tupla direto da tabela sintatica
+                no caso de palavras reservadas para o campo token nao ser nulo */
+                retorno = tabela_de_simbolos[lex]
                 pos_ponteiro += 1
                 return retorno
             }
@@ -98,12 +101,12 @@ function proximoToken() {
     }
 }
 
-function analiseLR(){
-    
+function analiseLR() {
+
     insereElementoPilha(0)
     a = proximoToken()
 
-    while(1){
+    while (1) {
         /* s = removeElementoPilha()    
         
         if(a == 'FIM'){
@@ -112,17 +115,28 @@ function analiseLR(){
         } */
 
         s = topoPilha() //Estado no topo da pilha
-        acao = tabela_sintatica[[s,a]] // Pegando acao correspondente na tabela sintatica
+        acao = tabela_sintatica[[s, a[1]]] // Pegando acao correspondente na tabela sintatica
+        console.log('estado ='+s+' token='+ a[1])
+        
+        if (acao.indexOf('S') != -1) {
 
-        if(acao.indexOf('S') != -1){
             insereElementoPilha(parseInt(acao.split('S')[1]))
             a = proximoToken()
-        }else if(acao.indexOf('R') != -1){
+        
+        } else if (acao.indexOf('R') != -1) {
+            console.log(acao)
+            console.log(producoes_gramatica[acao.split('R')[1]])
+            return
             // Desempilhar simbolos |B| da pilha
             // Faça estado t ser o topo da pilha
-            removeElementoPilha()
-            insereElementoPilha(topoPilha(),nao_terminais_reducao[acao.split('R')[1]])
-
+            //removeElementoPilha()
+            //insereElementoPilha(topoPilha(), nao_terminais_reducao[acao.split('R')[1]])
+        
+        } else if (acao == 'ACCEPT') {
+            return
+        
+        } else {
+            //Rotina de tratamento de erros
         }
 
     }

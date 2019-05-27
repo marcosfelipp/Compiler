@@ -258,7 +258,7 @@ tabela_sintatica = {
     [[18, 'id']]: 'S21',
 
     /* Estado 19 */
-    [[19, ';']]: 'S40',
+    [[19, 'PT_V']]: 'S40',
 
     /* Estado 20 */
     [[20, 'TIPO']]: 41,
@@ -279,7 +279,7 @@ tabela_sintatica = {
     [[24, '$']]: 'R32',
 
     /* Estado 25 */
-    [[25, ';']]: 'S45',
+    [[25, 'PT_V']]: 'S45',
 
     /* Estado 26 */
     [[26, 'leia']]: 'R12',
@@ -290,13 +290,13 @@ tabela_sintatica = {
     [[26, 'enquanto']]: 'R12',
 
     /* Estado 27 */
-    [[27, ';']]: 'R13',
+    [[27, 'PT_V']]: 'R13',
 
     /* Estado 28 */
-    [[28, ';']]: 'R14',
+    [[28, 'PT_V']]: 'R14',
 
     /* Estado 29 */
-    [[29, ';']]: 'R15',
+    [[29, 'PT_V']]: 'R15',
 
     /* Estado 30 */
     [[30, 'LD']]: 46,
@@ -409,16 +409,16 @@ tabela_sintatica = {
     [[40, 'enquanto']]: 'R5',
 
     /* Estado 41 */
-    [[41, ';']]: 'S57',
+    [[41, 'PT_V']]: 'S57',
 
     /* Estado 42 */
-    [[42, ';']]: 'R7',
+    [[42, 'PT_V']]: 'R7',
 
     /* Estado 43 */
-    [[43, ';']]: 'R8',
+    [[43, 'PT_V']]: 'R8',
 
     /* Estado 44 */
-    [[44, ';']]: 'R9',
+    [[44, 'PT_V']]: 'R9',
 
     /* Estado 45 */
     [[45, 'leia']]: 'R11',
@@ -429,20 +429,20 @@ tabela_sintatica = {
     [[45, 'enquanto']]: 'R11',
 
     /* Estado 46 */
-    [[46, ';']]: 'S58',
+    [[46, 'PT_V']]: 'S58',
 
     /* Estado 47 */
     [[47, 'opm']]: 'S59',
-    [[47, ';']]: 'R19',
+    [[47, 'PT_V']]: 'R19',
 
     /* Estado 48 */
-    [[48, ';']]: 'R20',
+    [[48, 'PT_V']]: 'R20',
     [[48, ')']]: 'R20',
     [[48, 'opm']]: 'R20',
     [[48, 'opr']]: 'R20',
 
     /* Estado 49 */
-    [[49, ';']]: 'R21',
+    [[49, 'PT_V']]: 'R21',
     [[49, ')']]: 'R21',
     [[49, 'opm']]: 'R21',
     [[49, 'opr']]: 'R21',
@@ -527,7 +527,7 @@ tabela_sintatica = {
     [[62, 'então']]: 'S66',
 
     /* Estado 63 */
-    [[63, ';']]: 'R18',
+    [[63, 'PT_V']]: 'R18',
 
     /* Estado 64 */
     [[64, 'CORPO_ER']]: 67,
@@ -661,46 +661,46 @@ tabela_sintatica = {
     [[76, 'enquanto']]: 'R37',
 }
 
-var nao_terminais_reducao = {
+var producoes_gramatica = {
 
-    1: 'P\'',
-    2: 'P',
-    3: 'V',
-    4: 'LV',
-    5: 'LV',
-    6: 'D',
-    7: 'TIPO',
-    8: 'TIPO',
-    9: 'TIPO',
-    10: 'A',
-    11: 'ES',
-    12: 'ES',
-    13: 'ARG',
-    14: 'ARG',
-    15: 'ARG',
-    16: 'A',
-    17: 'CMD',
-    18: 'LD',
-    19: 'LD',
-    20: 'OPRD', 
-    21: 'OPRD',
-    22: 'A',
-    23: 'COND',
-    24: 'CABECALHO',
-    25: 'EXP_R',
-    26: 'CORPO',
-    27: 'CORPO',
-    28: 'CORPO',
-    29: 'CORPO',
-    30: 'A',
-    31: 'CORPO',
-    32: 'A',
-    33: 'ER',
-    34: 'CORPO_ER',
-    35: 'CORPO_ER',
-    36: 'CORPO_ER',
-    37: 'CORPO_ER',
-    38: 'CORPO_ER',
+    1: 'P\'->P',
+    2: 'P->inicio V A',
+    3: 'V->varinicio LV',
+    4: 'LV->D LV',
+    5: 'LV->varfim;',
+    6: 'D->id TIPO;',
+    7: 'TIPO->inteiro',
+    8: 'TIPO->real',
+    9: 'TIPO->lit',
+    10: 'A->ES A',
+    11: 'ES->leia id;',
+    12: 'ES->escreva ARG;',
+    13: 'ARG->literal',
+    14: 'ARG->num',
+    15: 'ARG->id',
+    16: 'A->CMD A',
+    17: 'CMD->id rcb LD;',
+    18: 'LD->OPRD opm OPRD',
+    19: 'LD->OPRD',
+    20: 'OPRD->id',
+    21: 'OPRD->num',
+    22: 'A->COND A',
+    23: 'COND->CABEÇALHO CORPO',
+    24: 'CABEÇALHO->se (EXP_R) então',
+    25: 'EXP_R->OPRD opr OPRD',
+    26: 'CORPO->ES CORPO',
+    27: 'CORPO->CMD CORPO',
+    28: 'CORPO->COND CORPO',
+    29: 'CORPO->fimse',
+    30: 'A->fim',
+    31: 'CORPO->ER CORPO',
+    32: 'A->ER A',
+    33: 'ER->enquanto (EXP_R) faça CORPO_ER',
+    34: 'CORPO_ER->ES CORPO_ER',
+    35: 'CORPO_ER->CMD CORPO_ER',
+    36: 'CORPO_ER->COND CORPO_ER',
+    37: 'CORPO_ER->ER CORPO_ER',
+    38: 'CORPO_ER->fimenquanto',
 }
 
 console.log(tabela_sintatica[[0, 'inicio']])
