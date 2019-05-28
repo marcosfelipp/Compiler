@@ -107,12 +107,11 @@ function analiseLR() {
     a = proximoToken()
 
     while (1) {
-        /* s = removeElementoPilha()    
         
-        if(a == 'FIM'){
-            console.log("TERMINADA")
-            return
-        } */
+        // if(a == 'FIM'){
+        //     console.log("TERMINADA")
+        //     return
+        // }
 
         s = topoPilha() //Estado no topo da pilha
         acao = tabela_sintatica[[s, a[1]]] // Pegando acao correspondente na tabela sintatica
@@ -126,8 +125,8 @@ function analiseLR() {
         } else if (acao.indexOf('R') != -1) {
             console.log(acao)
             console.log(producoes_gramatica[acao.split('R')[1]])
-            return
             // Desempilhar simbolos |B| da pilha
+            
             // Faça estado t ser o topo da pilha
             //removeElementoPilha()
             //insereElementoPilha(topoPilha(), nao_terminais_reducao[acao.split('R')[1]])
