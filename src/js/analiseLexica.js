@@ -28,10 +28,6 @@ function inserir_tabela_view(tupla) {
 /* Movimentar barra de progresso e mostrar a tabela de tokens gerada */
 function compilar() {
 
-    // limpar o conteúdo do log de erros sempre que clicar em compilar
-    document.getElementById('log_erro').value = ''
-    document.getElementById('table-token-body').innerText = ''
-    
     recomple()
     
     var element = document.getElementById("myprogressBar");
@@ -40,13 +36,8 @@ function compilar() {
     function scene() {
         if (width >= 100) {
             clearInterval(identity);
-            
             analiseLR()
-            // Para testar funcionamento da função:
-            // while(proximoToken() != 'FIM'){
-            //     console.log(pos_ponteiro)
-            // }
-            
+
             console.log(tabela_de_simbolos);
         } else {
             width++;
@@ -59,26 +50,25 @@ function compilar() {
 
 // Zera variáveis quando for recompilar
 function recomple(){
+    // limpar o conteúdo do log de erros sempre que clicar em compilar
+    document.getElementById('log_erro').value = ''
+    document.getElementById('table-token-body').innerText = ''
+    document.getElementById('log_producoes').value = ''
+
     pos_ponteiro = 0
 }
 
-function log_erros(linha, coluna, erro) {
+function log_erros(erro) {
     texto = document.getElementById("log_erro").value
-    texto += "ERRO NA LINHA " + linha + ", COLUNA " + coluna + " " + erro + '\n' 
+    texto += erro + '\n' 
     document.getElementById("log_erro").value = texto
 }
-
 
 function automato(string_lida) {
     var i = 0
     var state = 0
 
     while (string_lida[i] != undefined && state != undefined) {
-
-        // Captura o erro de caractere invalido
-        if (dic[string_lida[i]] == undefined) {
-            log_erros('1', '2', string_lida[i])
-        }
 
         state = tabela_de_transicao[[state, dic[string_lida[i]]]]
 

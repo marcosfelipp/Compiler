@@ -106,11 +106,10 @@ const final_states = {
 }
 
 // ANALISADOR SINTÁTICO:
-
-pilha = []
+var pilha = []
 var tabela_sintatica
-
-var tabela_de_transicao_de_estados = []
+var tabela_erros_sintaticos
+var tabela_recuperacao_erros_sintaticos
 
 pos_ponteiro = 0
 string_lida = undefined
@@ -216,12 +215,12 @@ tabela_sintatica = {
 
     /* Estado 12 */
     [[12, 'ARG']]: 26,
-    [[12, 'literal']]: 'S27',
-    [[12, 'num']]: 'S28',
+    [[12, 'Literal']]: 'S27',
+    [[12, 'Num']]: 'S28',
     [[12, 'id']]: 'S29',
 
     /* Estado 13 */
-    [[13, 'rcb']]: 'S30',
+    [[13, 'RCB']]: 'S30',
 
     /* Estado 14 */
     [[14, 'CORPO']]: 31,
@@ -238,10 +237,10 @@ tabela_sintatica = {
     [[14, 'se']]: 'S16',
 
     /* Estado 15 */
-    [[15, '(']]: 'S37',
+    [[15, 'AB_P']]: 'S37',
 
     /* Estado 16 */
-    [[15, '(']]: 'S38',
+    [[16, 'AB_P']]: 'S38',
 
     /* Estado 17 */
     [[17, 'leia']]: 'R3',
@@ -253,9 +252,9 @@ tabela_sintatica = {
 
     /* Estado 18 */
     [[18, 'LV']]: 39,
-    [[18, 'D']]: 19,
-    [[18, 'varfim']]: 'S20',
-    [[18, 'id']]: 'S21',
+    [[18, 'D']]: 18,
+    [[18, 'varfim']]: 'S19',
+    [[18, 'id']]: 'S20',
 
     /* Estado 19 */
     [[19, 'PT_V']]: 'S40',
@@ -282,12 +281,14 @@ tabela_sintatica = {
     [[25, 'PT_V']]: 'S45',
 
     /* Estado 26 */
-    [[26, 'leia']]: 'R12',
-    [[26, 'escreva']]: 'R12',
-    [[26, 'id']]: 'R12',
-    [[26, 'se']]: 'R12',
-    [[26, 'fim']]: 'R12',
-    [[26, 'enquanto']]: 'R12',
+    // [[26, 'leia']]: 'R12',
+    // [[26, 'escreva']]: 'R12',
+    // [[26, 'id']]: 'R12',
+    // [[26, 'se']]: 'R12',
+    // [[26, 'fim']]: 'R12',
+    // [[26, 'enquanto']]: 'R12',
+
+    [[26, 'PT_V']]: 'S77',
 
     /* Estado 27 */
     [[27, 'PT_V']]: 'R13',
@@ -302,7 +303,7 @@ tabela_sintatica = {
     [[30, 'LD']]: 46,
     [[30, 'OPRD']]: 47,
     [[30, 'id']]: 'S48',
-    [[30, 'num']]: 'S49',
+    [[30, 'Num']]: 'S49',
 
     /* Estado 31 */
     [[31, 'leia']]: 'R23',
@@ -384,13 +385,13 @@ tabela_sintatica = {
     [[37, 'EXP_R']]: 54,
     [[37, 'OPRD']]: 55,
     [[37, 'id']]: 'S48',
-    [[37, 'num']]: 'S49',
+    [[37, 'Num']]: 'S49',
 
     /* Estado 38 */
     [[38, 'EXP_R']]: 56,
     [[38, 'OPRD']]: 55,
     [[38, 'id']]: 'S48',
-    [[38, 'num']]: 'S49',
+    [[38, 'Num']]: 'S49',
 
     /* Estado 39 */
     [[39, 'leia']]: 'R4',
@@ -432,20 +433,20 @@ tabela_sintatica = {
     [[46, 'PT_V']]: 'S58',
 
     /* Estado 47 */
-    [[47, 'opm']]: 'S59',
+    [[47, 'OPM']]: 'S59',
     [[47, 'PT_V']]: 'R19',
 
     /* Estado 48 */
     [[48, 'PT_V']]: 'R20',
-    [[48, ')']]: 'R20',
-    [[48, 'opm']]: 'R20',
-    [[48, 'opr']]: 'R20',
+    [[48, 'FC_V']]: 'R20',
+    [[48, 'OPM']]: 'R20',
+    [[48, 'OPR']]: 'R20',
 
     /* Estado 49 */
     [[49, 'PT_V']]: 'R21',
-    [[49, ')']]: 'R21',
-    [[49, 'opm']]: 'R21',
-    [[49, 'opr']]: 'R21',
+    [[49, 'FC_P']]: 'R21',
+    [[49, 'OPM']]: 'R21',
+    [[49, 'OPR']]: 'R21',
 
     /* Estado 50 */
     [[50, 'leia']]: 'R26',
@@ -488,13 +489,13 @@ tabela_sintatica = {
     [[53, 'fimenquanto']]: 'R31',
 
     /* Estado 54 */
-    [[54, ')']]: 'S60',
+    [[54, 'FC_P']]: 'S60',
 
     /* Estado 55 */
-    [[55, 'opr']]: 'S61',
+    [[55, 'OPR']]: 'S61',
 
     /* Estado 56 */
-    [[56, ')']]: 'S62',
+    [[56, 'FC_P']]: 'S62',
 
     /* Estado 57 */
     [[57, 'id']]: 'R6',
@@ -513,7 +514,7 @@ tabela_sintatica = {
     /* Estado 59 */
     [[59, 'OPRD']]: 63,
     [[59, 'id']]: 'S48',
-    [[59, 'num']]: 'S49',
+    [[59, 'Num']]: 'S49',
 
     /* Estado 60 */
     [[60, 'faça']]: 'S64',
@@ -521,10 +522,10 @@ tabela_sintatica = {
     /* Estado 61 */
     [[61, 'OPRD']]: 65,
     [[61, 'id']]: 'S48',
-    [[61, 'num']]: 'S49',
+    [[61, 'Num']]: 'S49',
 
     /* Estado 62 */
-    [[62, 'então']]: 'S66',
+    [[62, 'entao']]: 'S66',
 
     /* Estado 63 */
     [[63, 'PT_V']]: 'R18',
@@ -544,7 +545,7 @@ tabela_sintatica = {
     [[64, 'se']]: 'S16',
 
     /* Estado 65 */
-    [[65, ')']]: 'R25',
+    [[65, 'FC_P']]: 'R25',
 
     /* Estado 66 */
     [[66, 'leia']]: 'R24',
@@ -659,13 +660,23 @@ tabela_sintatica = {
     [[76, 'se']]: 'R37',
     [[76, 'fim']]: 'R37',
     [[76, 'enquanto']]: 'R37',
+
+    /* Estado 77 */
+    [[77, 'leia']]: 'R12',
+    [[77, 'escreva']]: 'R12',
+    [[77, 'id']]: 'R12',
+    [[77, 'se']]: 'R12',
+    [[77, 'fim']]: 'R12',
+    [[77, 'enquanto']]: 'R12',
+    [[77, 'fimse']]: 'R12',
+    [[77, 'fimenquanto']]: 'R12',
 }
 
 var producoes_gramatica = {
 
     1: ['P\'', 'P'],
-    2: ['P','inicio', 'V', 'A'],
-    3: ['V','varinicio', 'LV'],
+    2: ['P', 'inicio', 'V', 'A'],
+    3: ['V', 'varinicio', 'LV'],
     4: ['LV', 'D', 'LV'],
     5: ['LV', 'varfim', ';'],
     6: ['D', 'id', 'TIPO', ';'],
@@ -673,9 +684,9 @@ var producoes_gramatica = {
     8: ['TIPO', 'real'],
     9: ['TIPO', 'lit'],
     10: ['A', 'ES', 'A'],
-    11: ['ES','leia', 'id', ';'],
+    11: ['ES', 'leia', 'id', ';'],
     12: ['ES', 'escreva', 'ARG', ';'],
-    13: ['ARG', 'literal'],
+    13: ['ARG', 'Literal'],
     14: ['ARG', 'num'],
     15: ['ARG', 'id'],
     16: ['A', 'CMD', 'A'],
@@ -686,9 +697,9 @@ var producoes_gramatica = {
     21: ['OPRD', 'num'],
     22: ['A', 'COND', 'A'],
     23: ['COND', 'CABEÇALHO', 'CORPO'],
-    24: ['CABEÇALHO', 'se', '(', 'EXP_R', ')', 'então'],
+    24: ['CABEÇALHO', 'se', '(', 'EXP_R', ')', 'entao'],
     25: ['EXP_R', 'OPRD', 'opr', 'OPRD'],
-    26: ['CORPO','ES', 'CORPO'],
+    26: ['CORPO', 'ES', 'CORPO'],
     27: ['CORPO', 'CMD', 'CORPO'],
     28: ['CORPO', 'COND', 'CORPO'],
     29: ['CORPO', 'fimse'],
@@ -701,6 +712,72 @@ var producoes_gramatica = {
     36: ['CORPO_ER', 'COND', 'CORPO_ER'],
     37: ['CORPO_ER', 'ER', 'CORPO_ER'],
     38: ['CORPO_ER', 'fimenquanto'],
+}
+
+tabela_erros_sintaticos = {
+    0: "ERRO: Referência indefinida para 'inicio'",
+    2: "ERRO: Referência indefinida para 'varinicio'",
+    3: "ERRO: Referência indefinida para 'fim'",
+    4: "ERRO: Declaração 'varfim' esperado",
+    11: "ERRO: Identificador esperado apos 'leia'",
+    12: "ERRO: Esperado literal, número ou identificador após escreva",
+    13: "ERRO: Operador <- (atribuição) esperado após o identificador",
+    15: "ERRO: Abre parênteses '(' esperado após enquanto",
+    16: "ERRO: Abre parênteses '(' esperado após se",
+    19: "ERRO:';' esperado ao final da sentença",
+    20: "ERRO: tipo de identificador não declarado",
+
+    25: "ERRO:';' esperado ao final da sentença",
+    26: "ERRO:';' esperado ao final da sentença",
+    30: "ERRO: Identificador, número ou operação matemática esperada após o operador de atribuição (<-)",
+    37: "ERRO: Operação lógica esperada dentro dos parênteses",
+    38: "ERRO: Operação lógica esperada dentro dos parênteses",
+    41: "ERRO:';' esperado ao final da sentença",
+    42: "ERRO:';' esperado ao final da sentença",
+    43: "ERRO:';' esperado ao final da sentença",
+    44: "ERRO:';' esperado ao final da sentença",
+    //47 : "ERRO:Operador matemático (+,-,*,/) esperado",
+    48: "ERRO:';' esperado ao final da sentença",
+    49: "ERRO:';' esperado ao final da sentença",
+    55: "ERRO: Sentença sem operador lógico", //Erro não sendo ecoado
+    56: "ERRO:Fecha parênteses ')' esperado na sentença", //Erro não sendo ecoado
+    57: "ERRO:Declaração de variaveis ou 'varfim' esperados, porém não inseridos",
+    59: "ERRO:Identificador ou número esperado depois de operação matemática",
+    62: "ERRO:Palavra reservada 'entao' esperada no fim da sentença",
+
+}
+
+tabela_recuperacao_erros_sintaticos = {
+
+    0: ['inicio', 'inicio', '-'],
+    2: ['varinicio', 'varinicio', '-'],
+    3: ['fim', 'fim', '-'],
+    4: ['varfim', 'varfim', '-'],
+    11: ['leia', 'leia', '-'],
+    12: ['XXX', 'Literal', '-'],
+    13: ['<-', 'RCB', '-'],
+    15: ['(', 'AB_P', '-'],
+    16: ['(', 'AB_P', '-'],
+    19: [';', 'PT_V', '-'],
+    20: ['inteiro','inteiro','-'],
+    25: [';', 'PT_V', '-'],
+    26: [';', 'PT_V', '-'],
+    30: ['X', 'id', '-'],
+    37: ['>', 'OPR', '-'],
+    38: ['>', 'OPR', '-'],
+    41: [';', 'PT_V', '-'],
+    42: [';', 'PT_V', '-'],
+    43: [';', 'PT_V', '-'],
+    44: [';', 'PT_V', '-'],
+    //47 : "ERRO:Operador matemático (+,-,*,/) esperado",
+    48: [';', 'PT_V', '-'],
+    49: [';', 'PT_V', '-'],
+    //55: "ERRO: Sentença sem operador lógico", //Erro não sendo ecoado
+    //56: "ERRO:Fecha parênteses ')' esperado na sentença", //Erro não sendo ecoado
+    57: ['varfim', 'varfim', '-'],
+    59: ['XXX', 'id', '-'],
+    62: ['entao', 'entao', '-'],
+
 }
 
 console.log(tabela_sintatica[[0, 'inicio']])

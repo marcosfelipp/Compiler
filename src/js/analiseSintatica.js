@@ -10,13 +10,24 @@ function topoPilha() {
     return pilha[pilha.length - 1]
 }
 
+function log_producoes(producao) {
+    texto = document.getElementById("log_producoes").value
+    texto += producao[0] + " -> "
+    
+    for(i=1; i <producao.length; i++){
+        texto += producao[i] + ' '
+    }
+
+    document.getElementById("log_producoes").value = texto + '\n'
+}
+
 function proximoToken() {
     lex = ''
     tupla_atual = []
 
     while (true) {
         if (string_lida[pos_ponteiro] == '$') {
-            return 'FIM'
+            return ["$", "$", "-"]
         }
 
         lex += string_lida[pos_ponteiro]
@@ -62,7 +73,7 @@ function proximoToken() {
             if (string_lida[pos_ponteiro + 1] == ' ' ||
                 string_lida[pos_ponteiro + 1] == '\n' ||
                 string_lida[pos_ponteiro + 1] == '\t') {
-
+                
                 if (tupla_atual[1] == 'id') {
                     inserir_tabela_simbolo(tupla_atual)
                     inserir_tabela_view(tupla_atual)
@@ -94,7 +105,7 @@ function proximoToken() {
                 if (string_lida[i + 1] == '\r') {
                     return 'EROO'
                 }
-                i += 1
+                pos_ponteiro += 1
             }
         }
 
@@ -105,38 +116,49 @@ function analiseLR() {
 
     insereElementoPilha(0)
     a = proximoToken()
+    antigo_a = undefined
 
     while (1) {
         
-        // if(a == 'FIM'){
-        //     console.log("TERMINADA")
-        //     return
-        // }
-
-        s = topoPilha() //Estado no topo da pilha
-        acao = tabela_sintatica[[s, a[1]]] // Pegando acao correspondente na tabela sintatica
-        console.log('estado ='+s+' token='+ a[1])
+        s = topoPilha()
+        acao = tabela_sintatica[[s, a[1]]] 
         
-        if (acao.indexOf('S') != -1) {
-
-            insereElementoPilha(parseInt(acao.split('S')[1]))
-            a = proximoToken()
-        
-        } else if (acao.indexOf('R') != -1) {
-            console.log(acao)
-            console.log(producoes_gramatica[acao.split('R')[1]])
-            // Desempilhar simbolos |B| da pilha
+        if(acao != undefined){
+            if (acao.indexOf('S') != -1) {
+                insereElementoPilha(parseInt(acao.split('S')[1]))
+                // Tratamento de recuperação da análise sintatica:
+                a = antigo_a == undefined ? proximoToken() : antigo_a 
+                antigo_a = undefined
             
-            // Faça estado t ser o topo da pilha
-            //removeElementoPilha()
-            //insereElementoPilha(topoPilha(), nao_terminais_reducao[acao.split('R')[1]])
-        
-        } else if (acao == 'ACCEPT') {
-            return
-        
-        } else {
-            //Rotina de tratamento de erros
+            } else if (acao.indexOf('R') != -1) {
+    
+                numero_regra = acao.split('R')[1]
+                tamanho_producao = producoes_gramatica[numero_regra].length - 1
+    
+                // Desempilhar simbolos |B| da pilha
+                for(i=0; i< tamanho_producao; i++){
+                    removeElementoPilha()
+                }
+                
+                s = topoPilha()
+    
+                novo_estado = tabela_sintatica[[s, producoes_gramatica[numero_regra][0]]]
+                insereElementoPilha(novo_estado)
+                log_producoes(producoes_gramatica[numero_regra])
+            
+            } else if (acao == 'ACCEPT') {
+                return
+            }
+
+        }else {
+            // Tratamento e recuperação de erros
+            antigo_a = a
+            a = tabela_recuperacao_erros_sintaticos[s]
+
+            log_erros(tabela_erros_sintaticos[s])
+            
         }
 
     }
 }
+
