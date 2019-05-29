@@ -31,8 +31,14 @@ function proximoToken() {
         }
 
         lex += string_lida[pos_ponteiro]
-
+        
         if (lex == ' ' || lex == '\t' || lex == '\n') {
+            
+            // Incremento de linha:
+            if(lex == '\n'){
+                linha+=1
+            }
+
             lex = ''
             tupla_atual = []
             pos_ponteiro += 1
@@ -79,6 +85,11 @@ function proximoToken() {
                     inserir_tabela_view(tupla_atual)
                 } else {
                     inserir_tabela_view(tupla_atual)
+                }
+
+                // Incremento de linha:
+                if(string_lida[pos_ponteiro + 1] == '\n'){
+                    linha+=1
                 }
                 pos_ponteiro += 2
                 return retorno

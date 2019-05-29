@@ -58,6 +58,11 @@ var numbers = ("0123456789")
 var dic = {}
 var output;
 
+// COntrole de erros:
+
+var linha = 0
+var coluna = 0
+
 for (i in alphabet) {
     dic[alphabet[i]] = 0
 }
@@ -281,13 +286,6 @@ tabela_sintatica = {
     [[25, 'PT_V']]: 'S45',
 
     /* Estado 26 */
-    // [[26, 'leia']]: 'R12',
-    // [[26, 'escreva']]: 'R12',
-    // [[26, 'id']]: 'R12',
-    // [[26, 'se']]: 'R12',
-    // [[26, 'fim']]: 'R12',
-    // [[26, 'enquanto']]: 'R12',
-
     [[26, 'PT_V']]: 'S77',
 
     /* Estado 27 */
@@ -715,35 +713,33 @@ var producoes_gramatica = {
 }
 
 tabela_erros_sintaticos = {
-    0: "ERRO: Referência indefinida para 'inicio'",
-    2: "ERRO: Referência indefinida para 'varinicio'",
-    3: "ERRO: Referência indefinida para 'fim'",
-    4: "ERRO: Declaração 'varfim' esperado",
-    11: "ERRO: Identificador esperado apos 'leia'",
-    12: "ERRO: Esperado literal, número ou identificador após escreva",
-    13: "ERRO: Operador <- (atribuição) esperado após o identificador",
-    15: "ERRO: Abre parênteses '(' esperado após enquanto",
-    16: "ERRO: Abre parênteses '(' esperado após se",
-    19: "ERRO:';' esperado ao final da sentença",
-    20: "ERRO: tipo de identificador não declarado",
-
-    25: "ERRO:';' esperado ao final da sentença",
-    26: "ERRO:';' esperado ao final da sentença",
-    30: "ERRO: Identificador, número ou operação matemática esperada após o operador de atribuição (<-)",
-    37: "ERRO: Operação lógica esperada dentro dos parênteses",
-    38: "ERRO: Operação lógica esperada dentro dos parênteses",
-    41: "ERRO:';' esperado ao final da sentença",
-    42: "ERRO:';' esperado ao final da sentença",
-    43: "ERRO:';' esperado ao final da sentença",
-    44: "ERRO:';' esperado ao final da sentença",
-    //47 : "ERRO:Operador matemático (+,-,*,/) esperado",
-    48: "ERRO:';' esperado ao final da sentença",
-    49: "ERRO:';' esperado ao final da sentença",
-    55: "ERRO: Sentença sem operador lógico", //Erro não sendo ecoado
-    56: "ERRO:Fecha parênteses ')' esperado na sentença", //Erro não sendo ecoado
-    57: "ERRO:Declaração de variaveis ou 'varfim' esperados, porém não inseridos",
-    59: "ERRO:Identificador ou número esperado depois de operação matemática",
-    62: "ERRO:Palavra reservada 'entao' esperada no fim da sentença",
+    0: "ERRO SINTÁTICO: Referência indefinida para 'inicio'",
+    2: "ERRO SINTÁTICO: Referência indefinida para 'varinicio'",
+    3: "ERRO SINTÁTICO: Referência indefinida para 'fim'",
+    4: "ERRO SINTÁTICO: Declaração 'varfim' esperado",
+    11: "ERRO SINTÁTICO: Identificador esperado apos 'leia'",
+    12: "ERRO SINTÁTICO: Esperado literal, número ou identificador após escreva",
+    13: "ERRO SINTÁTICO: Operador <- (atribuição) esperado após o identificador",
+    15: "ERRO SINTÁTICO: Abre parênteses '(' esperado após enquanto",
+    16: "ERRO SINTÁTICO: Abre parênteses '(' esperado após se",
+    19: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    20: "ERRO SINTÁTICO: tipo de identificador não declarado",
+    25: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    26: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    30: "ERRO SINTÁTICO: Identificador, número ou operação matemática esperada após o operador de atribuição (<-)",
+    37: "ERRO SINTÁTICO: Operação lógica esperada dentro dos parênteses",
+    38: "ERRO SINTÁTICO: Operação lógica esperada dentro dos parênteses",
+    41: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    42: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    43: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    44: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    48: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    49: "ERRO SINTÁTICO: ';' esperado ao final da sentença",
+    55: "ERRO SINTÁTICO: Sentença sem operador lógico", 
+    56: "ERRO SINTÁTICO: Fecha parênteses ')' esperado na sentença",
+    57: "ERRO SINTÁTICO: Declaração de variaveis ou 'varfim' esperados, porém não inseridos",
+    59: "ERRO SINTÁTICO: Identificador ou número esperado depois de operação matemática",
+    62: "ERRO SINTÁTICO: Palavra reservada 'entao' esperada no fim da sentença",
 
 }
 
@@ -769,15 +765,10 @@ tabela_recuperacao_erros_sintaticos = {
     42: [';', 'PT_V', '-'],
     43: [';', 'PT_V', '-'],
     44: [';', 'PT_V', '-'],
-    //47 : "ERRO:Operador matemático (+,-,*,/) esperado",
     48: [';', 'PT_V', '-'],
     49: [';', 'PT_V', '-'],
-    //55: "ERRO: Sentença sem operador lógico", //Erro não sendo ecoado
-    //56: "ERRO:Fecha parênteses ')' esperado na sentença", //Erro não sendo ecoado
     57: ['varfim', 'varfim', '-'],
     59: ['XXX', 'id', '-'],
     62: ['entao', 'entao', '-'],
 
 }
-
-console.log(tabela_sintatica[[0, 'inicio']])

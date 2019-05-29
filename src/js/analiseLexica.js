@@ -60,7 +60,7 @@ function recomple(){
 
 function log_erros(erro) {
     texto = document.getElementById("log_erro").value
-    texto += erro + '\n' 
+    texto += erro + " na linha " + linha + "\n" 
     document.getElementById("log_erro").value = texto
 }
 
@@ -84,6 +84,10 @@ function automato(string_lida) {
 
             if (state != 8 && state != 11) {
                 state = undefined
+            }
+        }else{
+            if(dic[string_lida[i]] == undefined && string_lida[i] != "\n" && string_lida[i] != "$"){
+                log_erros("ERRO LEXICO " + string_lida[i])
             }
         }
 
