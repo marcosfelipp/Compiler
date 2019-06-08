@@ -772,3 +772,34 @@ tabela_recuperacao_erros_sintaticos = {
     62: ['entao', 'entao', '-'],
 
 }
+
+// ANALISADOR SEMÂNTICO:
+
+pilha_atributos = []
+
+
+
+// FUNCOES GENERICAS:
+
+function removeElementoPilha() {
+    return pilha.pop()
+}
+
+function insereElementoPilha(elemento) {
+    pilha.push(elemento)
+}
+
+function topoPilha() {
+    return pilha[pilha.length - 1]
+}
+
+function log_producoes(producao) {
+    texto = document.getElementById("log_producoes").value
+    texto += producao[0] + " -> "
+    
+    for(i=1; i <producao.length; i++){
+        texto += producao[i] + ' '
+    }
+
+    document.getElementById("log_producoes").value = texto + '\n'
+}

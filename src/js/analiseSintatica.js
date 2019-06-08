@@ -1,26 +1,3 @@
-function removeElementoPilha() {
-    return pilha.pop()
-}
-
-function insereElementoPilha(elemento) {
-    pilha.push(elemento)
-}
-
-function topoPilha() {
-    return pilha[pilha.length - 1]
-}
-
-function log_producoes(producao) {
-    texto = document.getElementById("log_producoes").value
-    texto += producao[0] + " -> "
-    
-    for(i=1; i <producao.length; i++){
-        texto += producao[i] + ' '
-    }
-
-    document.getElementById("log_producoes").value = texto + '\n'
-}
-
 function proximoToken() {
     lex = ''
     tupla_atual = []
@@ -145,7 +122,11 @@ function analiseLR() {
     
                 numero_regra = acao.split('R')[1]
                 tamanho_producao = producoes_gramatica[numero_regra].length - 1
-    
+                
+                // Chamar aqui o analisador semantico passando o numero da regra
+
+                aplicar_regra_semantica(numero_regra)
+
                 // Desempilhar simbolos |B| da pilha
                 for(i=0; i< tamanho_producao; i++){
                     removeElementoPilha()
