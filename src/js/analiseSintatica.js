@@ -32,6 +32,9 @@ function proximoToken() {
                 continue
             } else {
                 inserir_tabela_view(tabela_de_simbolos[lex])
+                
+                // Setando tipos para palavras reservadas
+                tabela_de_simbolos[lex][2] = lex
                 /* Precisa fazer o retorno pegar a tupla direto da tabela sintatica
                 no caso de palavras reservadas para o campo token nao ser nulo */
                 retorno = tabela_de_simbolos[lex]
@@ -104,13 +107,14 @@ function analiseLR() {
 
     insereElementoPilha(0)
     a = proximoToken()
+
     antigo_a = undefined
 
     while (1) {
         
         s = topoPilha()
         acao = tabela_sintatica[[s, a[1]]] 
-        
+
         if(acao != undefined){
             if (acao.indexOf('S') != -1) {
                 insereElementoPilha(parseInt(acao.split('S')[1]))
@@ -124,8 +128,7 @@ function analiseLR() {
                 tamanho_producao = producoes_gramatica[numero_regra].length - 1
                 
                 // Chamar aqui o analisador semantico passando o numero da regra
-
-                aplicar_regra_semantica(numero_regra)
+                aplicar_regra_semantica(parseInt(numero_regra, 10),a)
 
                 // Desempilhar simbolos |B| da pilha
                 for(i=0; i< tamanho_producao; i++){

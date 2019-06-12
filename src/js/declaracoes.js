@@ -775,9 +775,14 @@ tabela_recuperacao_erros_sintaticos = {
 
 // ANALISADOR SEMÂNTICO:
 
-pilha_atributos = []
+var pilha_atributos = []
+var tabela_de_nao_terminais = {}
+var codigo_objeto = ''
 
-
+//Preenchendo tabela de nao terminais inicialmente
+for(k in producoes_gramatica ){
+    tabela_de_nao_terminais[producoes_gramatica[k][0]] = ['-','-','-']
+}
 
 // FUNCOES GENERICAS:
 

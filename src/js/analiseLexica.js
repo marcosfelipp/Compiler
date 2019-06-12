@@ -94,8 +94,19 @@ function automato(string_lida) {
         i += 1;
     }
 
-    return [string_lida, final_states[state], "-"]
+    return [string_lida, final_states[state], verifica_tipo(string_lida, final_states[state])]
 
+}
+
+function verifica_tipo(lexema, token){
+
+    if(token == 'OPR' || token == 'OPM'){
+        return lexema
+    }else if(token == 'RCB'){
+        return '='
+    }else{
+        return token
+    }
 }
 
 

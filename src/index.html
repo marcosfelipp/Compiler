@@ -15,12 +15,15 @@
         <form>
             <div class="form-group">
                 <label>Inserir arquivo para compilar:</label>
-                <input type="file" class="form-control-file" onchange='readProg(this)'/>
+                <input type="file" class="form-control-file" onchange='readProg(this)' />
             </div>
 
             <div class="form-group">
                 <button type="button" class="btn btn-primary" id="sendFile" onclick="compilar()">Compilar!</button>
             </div>
+
+            <textarea id="text-val" rows="4">This is the content of my file</textarea><br />
+            <input type="button" id="dwn-btn" value="Download dinamically generated text file" />
 
             <div class="progress" style="height: 25px;">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -34,7 +37,8 @@
         </div>
 
         <div class="form-group">
-            <label for="exampleFormControlTextarea3"><span class="badge badge-pill badge-success">Produções reduzidas:</span></label>
+            <label for="exampleFormControlTextarea3"><span class="badge badge-pill badge-success">Produções
+                    reduzidas:</span></label>
             <textarea class="form-control" id="log_producoes" rows="7"></textarea>
         </div>
 
@@ -50,7 +54,7 @@
             <tbody id="table-token-body">
 
             </tbody>
-            
+
         </table>
 
     </div>
