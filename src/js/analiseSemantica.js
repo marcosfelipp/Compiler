@@ -1,4 +1,4 @@
-function aplicar_regra_semantica(numero_regra, tupla) {
+function aplicar_regra_semantica(numero_regra, nao_terminal) {
 
     switch (numero_regra) {
         case 1:
@@ -13,38 +13,101 @@ function aplicar_regra_semantica(numero_regra, tupla) {
             add_codigo_objeto('\n\n\n')
             break;
         case 6:
-            //console.log(tupla)
-            tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tabela_de_nao_terminais['TIPO'][2]]
-            add_codigo_objeto(tabela_de_nao_terminais['TIPO'][2] + ' ' + tabela_de_simbolos[tupla[0]][0] + ';')
+
+            tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 3]][2] = tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2]
+
+            add_codigo_objeto(tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2] + ' ' + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 3]][0] + ';\n')
             break;
         case 7:
-            tabela_de_nao_terminais['TIPO'][2] = tabela_de_simbolos['inteiro'][2] //Arrumar o tipo das palavras reservadas
+            tabela_de_simbolos_geral[nao_terminal][2] = tabela_de_simbolos_geral['inteiro'][2]
             break;
         case 8:
-            tabela_de_nao_terminais['TIPO'][2] = tabela_de_simbolos['real'][2] //Arrumar o tipo das palavras reservadas
+            tabela_de_simbolos_geral[nao_terminal][2] = tabela_de_simbolos_geral['real'][2]
             break;
         case 9:
-            tabela_de_nao_terminais['TIPO'][2] = tabela_de_simbolos['lit'][2] //Arrumar o tipo das palavras reservadas
+            tabela_de_simbolos_geral[nao_terminal][2] = tabela_de_simbolos_geral['lit'][2]
             break;
         case 10:
             break;
         case 11:
-            //Como pegar o id nesse caso???
-            //console.log(tupla)
+
+            /* Tratando-se dos id's tem que usar a tabela de simbolos, pois pode sobrescrever os nao terminais na tabela geral */
+            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 2]][2] != '-') {
+
+                switch (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 2]][2]) {
+
+                    case 'literal':
+                        add_codigo_objeto('scanf("%s",' + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 2]][0] + ');\n')
+                        break;
+
+                    case 'int':
+                        add_codigo_objeto('scanf("%d",&' + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 2]][0] + ');\n')
+                        break;
+
+                    case 'double':
+                        add_codigo_objeto('scanf("%lf",&' + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 2]][0] + ');\n')
+                        break;
+                }
+
+            } else {/*“Erro: Variável não declarada”*/
+
+            }
+
             break;
         case 12:
-           add_codigo_objeto('printf("'+tabela_de_nao_terminais['ARG'][0]+');')
+
+            add_codigo_objeto('printf("Digite ' + pilha_atributos[pilha_atributos.length - 2][0] + '");\n')
+
             break;
         case 13:
-            console.log(tupla)
+
+            tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral['lit']
+
             break;
         case 14:
+
+            /* Verificar se elemento no topo da pilha de atributos é um id */
+            if (automato(pilha_atributos[pilha_atributos.length - 1])[1] == 'Num') {
+
+                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 1]]
+            }
+
             break;
         case 15:
+
+            /* Verificar se elemento no topo da pilha de atributos é um id */
+            if (automato(pilha_atributos[pilha_atributos.length - 1])[1] == 'id') {
+
+                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 1]]
+
+            } else { /* Emitir na tela “Erro: Variável não declarada”. */
+
+            }
+
             break;
         case 16:
             break;
         case 17:
+            /* (11) ["inicio", "V", "ES", "ES", "ES", "ES", "COND", "B", "<-", "LD", ";"] */
+
+            console.log('Regra 17')
+            console.log(pilha_atributos)
+            console.log(nao_terminal)
+
+            if (automato(pilha_atributos[pilha_atributos.length - 4])[1] == 'id') {
+
+                /* Verificando se os tipos do id da pilha e de LD sao os mesmos */
+                if (pilha_atributos[pilha_atributos.length - 4][2] == pilha_atributos[pilha_atributos.length - 2][2]) {
+                    add_codigo_objeto(tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][0] + '' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][2] + '' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] + '\n')
+
+                } else { /*Caso contrário emitir:”Erro: Tipos diferentes para atribuição”. */
+
+                }
+
+            } else {/* Caso contrário emitir “Erro: Variável não declarada”. */
+
+            }
+
             break;
         case 18:
             break;

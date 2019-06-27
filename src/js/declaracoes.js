@@ -111,7 +111,7 @@ const final_states = {
 }
 
 // ANALISADOR SINTÁTICO:
-var pilha = []
+var pilha_estados = []
 var tabela_sintatica
 var tabela_erros_sintaticos
 var tabela_recuperacao_erros_sintaticos
@@ -776,26 +776,26 @@ tabela_recuperacao_erros_sintaticos = {
 // ANALISADOR SEMÂNTICO:
 
 var pilha_atributos = []
-var tabela_de_nao_terminais = {}
+var tabela_de_simbolos_geral = {}
 var codigo_objeto = ''
 
 //Preenchendo tabela de nao terminais inicialmente
 for(k in producoes_gramatica ){
-    tabela_de_nao_terminais[producoes_gramatica[k][0]] = ['-','-','-']
+    tabela_de_simbolos_geral[producoes_gramatica[k][0]] = ['-','-','-']
 }
 
 // FUNCOES GENERICAS:
 
-function removeElementoPilha() {
-    return pilha.pop()
+function removeElementoPilha(pilha_atual) {
+    return pilha_atual.pop()
 }
 
-function insereElementoPilha(elemento) {
-    pilha.push(elemento)
+function insereElementoPilha(pilha_atual,elemento) {
+    pilha_atual.push(elemento)
 }
 
-function topoPilha() {
-    return pilha[pilha.length - 1]
+function topoPilha(pilha_atual) {
+    return pilha_atual[pilha_atual.length - 1]
 }
 
 function log_producoes(producao) {

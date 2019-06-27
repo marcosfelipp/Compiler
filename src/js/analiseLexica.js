@@ -23,13 +23,18 @@ function inserir_tabela_view(tupla) {
     row.appendChild(cell_token);
     row.appendChild(cell_tipo);
     table.tBodies[0].appendChild(row);
+
+    /* Inserindo também na tabela de simbolos geral */
+    if (tupla[1] != 'Num' && tupla[1] != 'Literal' && tupla[1] != 'id') {
+        tabela_de_simbolos_geral[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
+    }
 }
 
 /* Movimentar barra de progresso e mostrar a tabela de tokens gerada */
 function compilar() {
 
     recomple()
-    
+
     var element = document.getElementById("myprogressBar");
     var width = 1;
     var identity = setInterval(scene, 25);
@@ -49,7 +54,7 @@ function compilar() {
 }
 
 // Zera variáveis quando for recompilar
-function recomple(){
+function recomple() {
     // limpar o conteúdo do log de erros sempre que clicar em compilar
     document.getElementById('log_erro').value = ''
     document.getElementById('table-token-body').innerText = ''
@@ -60,7 +65,7 @@ function recomple(){
 
 function log_erros(erro) {
     texto = document.getElementById("log_erro").value
-    texto += erro + " na linha " + linha + "\n" 
+    texto += erro + " na linha " + linha + "\n"
     document.getElementById("log_erro").value = texto
 }
 
@@ -85,8 +90,8 @@ function automato(string_lida) {
             if (state != 8 && state != 11) {
                 state = undefined
             }
-        }else{
-            if(dic[string_lida[i]] == undefined && string_lida[i] != "\n" && string_lida[i] != "$"){
+        } else {
+            if (dic[string_lida[i]] == undefined && string_lida[i] != "\n" && string_lida[i] != "$") {
                 log_erros("ERRO LEXICO " + string_lida[i])
             }
         }
@@ -98,13 +103,13 @@ function automato(string_lida) {
 
 }
 
-function verifica_tipo(lexema, token){
+function verifica_tipo(lexema, token) {
 
-    if(token == 'OPR' || token == 'OPM'){
+    if (token == 'OPR' || token == 'OPM') {
         return lexema
-    }else if(token == 'RCB'){
+    } else if (token == 'RCB') {
         return '='
-    }else{
+    } else {
         return token
     }
 }
@@ -123,6 +128,6 @@ inserir_tabela_simbolo(["se", "se", "-"])
 inserir_tabela_simbolo(["entao", "entao", "-"])
 inserir_tabela_simbolo(["fimse", "fimse", "-"])
 inserir_tabela_simbolo(["fim", "fim", "-"])
-inserir_tabela_simbolo(["inteiro", "inteiro", "-"])
-inserir_tabela_simbolo(["lit", "lit", "-"])
-inserir_tabela_simbolo(["real", "real", "-"])
+inserir_tabela_simbolo(["inteiro", "inteiro", "int"])
+inserir_tabela_simbolo(["lit", "lit", "literal"])
+inserir_tabela_simbolo(["real", "real", "double"])

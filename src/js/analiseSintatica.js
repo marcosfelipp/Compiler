@@ -34,7 +34,7 @@ function proximoToken() {
                 inserir_tabela_view(tabela_de_simbolos[lex])
                 
                 // Setando tipos para palavras reservadas
-                tabela_de_simbolos[lex][2] = lex
+                //tabela_de_simbolos[lex][2] = lex
                 /* Precisa fazer o retorno pegar a tupla direto da tabela sintatica
                 no caso de palavras reservadas para o campo token nao ser nulo */
                 retorno = tabela_de_simbolos[lex]
@@ -105,19 +105,22 @@ function proximoToken() {
 
 function analiseLR() {
 
-    insereElementoPilha(0)
+    insereElementoPilha(pilha_estados,0)
     a = proximoToken()
 
     antigo_a = undefined
 
     while (1) {
         
-        s = topoPilha()
+        s = topoPilha(pilha_estados)
         acao = tabela_sintatica[[s, a[1]]] 
 
         if(acao != undefined){
             if (acao.indexOf('S') != -1) {
-                insereElementoPilha(parseInt(acao.split('S')[1]))
+               
+                insereElementoPilha(pilha_estados,parseInt(acao.split('S')[1]))
+                insereElementoPilha(pilha_atributos,a[0])
+
                 // Tratamento de recuperação da análise sintatica:
                 a = antigo_a == undefined ? proximoToken() : antigo_a 
                 antigo_a = undefined
@@ -126,19 +129,24 @@ function analiseLR() {
     
                 numero_regra = acao.split('R')[1]
                 tamanho_producao = producoes_gramatica[numero_regra].length - 1
-                
-                // Chamar aqui o analisador semantico passando o numero da regra
-                aplicar_regra_semantica(parseInt(numero_regra, 10),a)
+                nao_terminal = producoes_gramatica[numero_regra][0]
 
-                // Desempilhar simbolos |B| da pilha
+                // Chamar aqui o analisador semantico passando o numero da regra
+                aplicar_regra_semantica(parseInt(numero_regra, 10), nao_terminal)
+
+                // Desempilhar simbolos |B| da pilha de estados e de atributos
                 for(i=0; i< tamanho_producao; i++){
-                    removeElementoPilha()
+                    removeElementoPilha(pilha_estados)
+                    removeElementoPilha(pilha_atributos)
                 }
-                
-                s = topoPilha()
+               
+                s = topoPilha(pilha_estados)
     
                 novo_estado = tabela_sintatica[[s, producoes_gramatica[numero_regra][0]]]
-                insereElementoPilha(novo_estado)
+                
+                insereElementoPilha(pilha_estados,novo_estado)
+                insereElementoPilha(pilha_atributos,nao_terminal)
+                
                 log_producoes(producoes_gramatica[numero_regra])
             
             } else if (acao == 'ACCEPT') {
