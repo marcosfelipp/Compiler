@@ -777,6 +777,7 @@ tabela_recuperacao_erros_sintaticos = {
 
 var pilha_atributos = []
 var tabela_de_simbolos_geral = {}
+var cont_variaveis_temporarias = 0
 var codigo_objeto = ''
 
 //Preenchendo tabela de nao terminais inicialmente

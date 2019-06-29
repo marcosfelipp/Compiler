@@ -56,29 +56,41 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
             break;
         case 12:
 
-            add_codigo_objeto('printf("Digite ' + pilha_atributos[pilha_atributos.length - 2][0] + '");\n')
+            if (tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][1] == 'id') {
+
+                switch (tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2]) {
+
+                    case 'literal': add_codigo_objeto('printf("%s",' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] + ');\n')
+                        break;
+
+                    case 'int': add_codigo_objeto('printf("%d",' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] + ');\n')
+                        break;
+
+                    case 'double': add_codigo_objeto('printf("%lf",' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] + ');\n')
+                        break;
+
+                }
+            } else {
+                add_codigo_objeto('printf(' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] + ');\n')
+            }
 
             break;
         case 13:
 
-            tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral['lit']
+            tabela_de_simbolos_geral[nao_terminal] = automato(pilha_atributos[pilha_atributos.length - 1])
+            //console.log(tabela_de_simbolos_geral[nao_terminal])
 
             break;
         case 14:
 
-            /* Verificar se elemento no topo da pilha de atributos é um id */
-            if (automato(pilha_atributos[pilha_atributos.length - 1])[1] == 'Num') {
-
-                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 1]]
-            }
+            tabela_de_simbolos_geral[nao_terminal] = automato(pilha_atributos[pilha_atributos.length - 1])
 
             break;
         case 15:
 
-            /* Verificar se elemento no topo da pilha de atributos é um id */
-            if (automato(pilha_atributos[pilha_atributos.length - 1])[1] == 'id') {
+            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]] != undefined) {
 
-                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 1]]
+                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]]
 
             } else { /* Emitir na tela “Erro: Variável não declarada”. */
 
@@ -88,17 +100,15 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
         case 16:
             break;
         case 17:
-            /* (11) ["inicio", "V", "ES", "ES", "ES", "ES", "COND", "B", "<-", "LD", ";"] */
 
-            console.log('Regra 17')
-            console.log(pilha_atributos)
-            console.log(nao_terminal)
-
-            if (automato(pilha_atributos[pilha_atributos.length - 4])[1] == 'id') {
+            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]] != undefined) {
 
                 /* Verificando se os tipos do id da pilha e de LD sao os mesmos */
                 if (pilha_atributos[pilha_atributos.length - 4][2] == pilha_atributos[pilha_atributos.length - 2][2]) {
-                    add_codigo_objeto(tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][0] + '' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][2] + '' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] + '\n')
+
+                    add_codigo_objeto(tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][0] + ''
+                        + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][2] + ''
+                        + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] + ';\n')
 
                 } else { /*Caso contrário emitir:”Erro: Tipos diferentes para atribuição”. */
 
@@ -110,20 +120,77 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
 
             break;
         case 18:
+
+            if ((tabela_de_simbolos_geral['OPRD'][2] == tabela_de_simbolos_geral['OPRD1'][2])
+                && (tabela_de_simbolos_geral['OPRD'][2] != 'literal')) {
+
+                tabela_de_simbolos_geral[nao_terminal][0] = 'T' + cont_variaveis_temporarias
+                cont_variaveis_temporarias++
+
+                add_codigo_objeto(tabela_de_simbolos_geral[nao_terminal][0] + '=' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][0] + '' +
+                    tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2] + '' + tabela_de_simbolos_geral['OPRD1'][0] + ';\n')
+
+                tabela_de_simbolos_geral['OPRD1'] = ['-', '-', '-']
+
+
+            } else {//Caso contrário emitir “Erro: Operandos com tipos incompatíveis”
+
+            }
+
             break;
         case 19:
+
+            if (tabela_de_simbolos_geral['OPRD1'][0] == '-') {
+                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 1]]
+            } else {
+                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral['OPRD1']
+            }
+
             break;
         case 20:
+
+            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]] != undefined) {
+                tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]]
+
+            } else {//Caso contrário emitir “Erro: Variável não declarada”
+
+            }
+
             break;
         case 21:
+
+            /* Necessida de criar um novo OPRD para nao ocorrer erro */
+            if (tabela_de_simbolos_geral[nao_terminal] != ['-', '-', '-']) {
+                tabela_de_simbolos_geral[nao_terminal + '1'] = automato([pilha_atributos[pilha_atributos.length - 1]])
+            }
+
             break;
         case 22:
             break;
         case 23:
+            add_codigo_objeto('}\n')
             break;
         case 24:
+
+            add_codigo_objeto('if(' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][0] + '){\n')
+
             break;
         case 25:
+
+            if (tabela_de_simbolos_geral['OPRD'][2] == tabela_de_simbolos_geral['OPRD1'][2]) {
+
+                tabela_de_simbolos_geral[nao_terminal][0] = 'T' + cont_variaveis_temporarias
+                cont_variaveis_temporarias++
+
+                add_codigo_objeto(tabela_de_simbolos_geral[nao_terminal][0] + '=' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][0] + '' +
+                    tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2] + '' + tabela_de_simbolos_geral['OPRD1'][0] + ';\n')
+
+                tabela_de_simbolos_geral['OPRD1'] = ['-', '-', '-']
+
+            } else {//Caso contrário emitir “Erro: Operandos com tipos incompatíveis”
+
+            }
+
             break;
         case 26:
             break;
@@ -143,7 +210,30 @@ function add_codigo_objeto(conteudo) {
     codigo_objeto += conteudo
 }
 
+function ajustar_codigo_objeto(codigo_objeto) {
+    
+    let temp = '#include<stdio.h> \n' +
+        'typedef char literal[256];\n' +
+        'void main(void)\n' +
+        '{\n' +
+        '/*----Variaveis temporarias----*/\n'
+
+    for (i = 0; i < cont_variaveis_temporarias; i++) {
+        temp += 'int T' + i + ';\n'
+    }
+
+    temp += '/*----Variaveis temporarias----*/\n'
+    temp += codigo_objeto
+    temp += '}'
+
+    return temp
+
+}
+
 function download(filename) {
+
+    codigo_objeto = ajustar_codigo_objeto(codigo_objeto)
+
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(codigo_objeto));
     element.setAttribute('download', filename);
@@ -158,8 +248,8 @@ function download(filename) {
 
 document.getElementById("dwn-btn").addEventListener("click", function () {
     // Generate download of hello.txt file with some content
-    var text = document.getElementById("text-val").value;
-    var filename = "hello.txt";
+    //var text = document.getElementById("text-val").value;
+    var filename = "PROGRAMA.c";
 
-    download(filename, text);
+    download(filename);
 }, false);

@@ -109,7 +109,15 @@ function verifica_tipo(lexema, token) {
         return lexema
     } else if (token == 'RCB') {
         return '='
-    } else {
+    } else if (token == 'Num') {
+
+        if(lexema % 1 === 0){
+            return 'int'
+        }else{
+            return 'double'
+        }
+    }
+    else {
         return token
     }
 }
