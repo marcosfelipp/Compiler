@@ -10,3 +10,6 @@ fim
 inteiro
 lit
 real
+enquanto
+faça
+fimenquanto

@@ -1,5 +1,4 @@
 function aplicar_regra_semantica(numero_regra, nao_terminal) {
-
     switch (numero_regra) {
         case 1:
             break;
@@ -202,7 +201,22 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
             break;
         case 30:
             break;
-
+        case 31:
+            break;
+        case 32:
+            break;
+        case 33:
+            add_codigo_objeto('while(' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][0] + '){\n')
+        case 34:
+            break;
+        case 35:
+            break;
+        case 36:
+            break;
+        case 37:
+            break;
+        case 38:
+            break;
     }
 }
 
@@ -211,7 +225,7 @@ function add_codigo_objeto(conteudo) {
 }
 
 function ajustar_codigo_objeto(codigo_objeto) {
-    
+
     let temp = '#include<stdio.h> \n' +
         'typedef char literal[256];\n' +
         'void main(void)\n' +

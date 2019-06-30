@@ -515,7 +515,7 @@ tabela_sintatica = {
     [[59, 'Num']]: 'S49',
 
     /* Estado 60 */
-    [[60, 'faça']]: 'S64',
+    [[60, 'faca']]: 'S64',
 
     /* Estado 61 */
     [[61, 'OPRD']]: 65,
@@ -704,7 +704,7 @@ var producoes_gramatica = {
     30: ['A', 'fim'],
     31: ['CORPO', 'ER', 'CORPO'],
     32: ['A', 'ER', 'A'],
-    33: ['ER', 'enquanto', '(', 'EXP_R', ')', 'faça', 'CORPO_ER'],
+    33: ['ER', 'enquanto', '(', 'EXP_R', ')', 'faca', 'CORPO_ER'],
     34: ['CORPO_ER', 'ES', 'CORPO_ER'],
     35: ['CORPO_ER', 'CMD', 'CORPO_ER'],
     36: ['CORPO_ER', 'COND', 'CORPO_ER'],
