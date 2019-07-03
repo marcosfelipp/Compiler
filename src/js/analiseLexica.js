@@ -26,7 +26,7 @@ function inserir_tabela_view(tupla) {
 
     /* Inserindo também na tabela de simbolos geral */
     if (tupla[1] != 'Num' && tupla[1] != 'Literal' && tupla[1] != 'id') {
-        tabela_de_simbolos_geral[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
+        tabela_de_simbolos[tupla[0]] = [tupla[0], tupla[1], tupla[2]]
     }
 }
 
@@ -64,9 +64,12 @@ function recomple() {
 }
 
 function log_erros(erro) {
+    l = linha  + 1
     texto = document.getElementById("log_erro").value
-    texto += erro + ", linha " + linha + "\n"
+    texto += erro + ", linha " + l + "\n"
     document.getElementById("log_erro").value = texto
+
+    flag_erro = false;
 }
 
 function automato(string_lida) {

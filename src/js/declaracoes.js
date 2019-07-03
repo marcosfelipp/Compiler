@@ -776,13 +776,15 @@ tabela_recuperacao_erros_sintaticos = {
 // ANALISADOR SEMÂNTICO:
 
 var pilha_atributos = []
-var tabela_de_simbolos_geral = {}
+//var tabela_de_simbolos_geral = {}
 var cont_variaveis_temporarias = 0
 var codigo_objeto = ''
 
-//Preenchendo tabela de nao terminais inicialmente
+var flag_erro = true
+
+//Preenchendo tabela de nao terminais inicialmente 
 for(k in producoes_gramatica ){
-    tabela_de_simbolos_geral[producoes_gramatica[k][0]] = ['-','-','-']
+    tabela_de_simbolos['1'+producoes_gramatica[k][0]] = ['-','-','-']
 }
 
 // FUNCOES GENERICAS:

@@ -8,12 +8,12 @@ function proximoToken() {
         }
 
         lex += string_lida[pos_ponteiro]
-        
+
         if (lex == ' ' || lex == '\t' || lex == '\n') {
-            
+
             // Incremento de linha:
-            if(lex == '\n'){
-                linha+=1
+            if (lex == '\n') {
+                linha += 1
             }
 
             lex = ''
@@ -32,7 +32,7 @@ function proximoToken() {
                 continue
             } else {
                 inserir_tabela_view(tabela_de_simbolos[lex])
-                
+
                 // Setando tipos para palavras reservadas
                 //tabela_de_simbolos[lex][2] = lex
                 /* Precisa fazer o retorno pegar a tupla direto da tabela sintatica
@@ -59,7 +59,7 @@ function proximoToken() {
             if (string_lida[pos_ponteiro + 1] == ' ' ||
                 string_lida[pos_ponteiro + 1] == '\n' ||
                 string_lida[pos_ponteiro + 1] == '\t') {
-                
+
                 if (tupla_atual[1] == 'id') {
                     inserir_tabela_simbolo(tupla_atual)
                     inserir_tabela_view(tupla_atual)
@@ -68,8 +68,8 @@ function proximoToken() {
                 }
 
                 // Incremento de linha:
-                if(string_lida[pos_ponteiro + 1] == '\n'){
-                    linha+=1
+                if (string_lida[pos_ponteiro + 1] == '\n') {
+                    linha += 1
                 }
                 pos_ponteiro += 2
                 return retorno
@@ -105,28 +105,28 @@ function proximoToken() {
 
 function analiseLR() {
 
-    insereElementoPilha(pilha_estados,0)
+    insereElementoPilha(pilha_estados, 0)
     a = proximoToken()
 
     antigo_a = undefined
 
     while (1) {
-        
-        s = topoPilha(pilha_estados)
-        acao = tabela_sintatica[[s, a[1]]] 
 
-        if(acao != undefined){
+        s = topoPilha(pilha_estados)
+        acao = tabela_sintatica[[s, a[1]]]
+
+        if (acao != undefined) {
             if (acao.indexOf('S') != -1) {
-               
-                insereElementoPilha(pilha_estados,parseInt(acao.split('S')[1]))
-                insereElementoPilha(pilha_atributos,a[0])
+
+                insereElementoPilha(pilha_estados, parseInt(acao.split('S')[1]))
+                insereElementoPilha(pilha_atributos, a[0])
 
                 // Tratamento de recuperação da análise sintatica:
-                a = antigo_a == undefined ? proximoToken() : antigo_a 
+                a = antigo_a == undefined ? proximoToken() : antigo_a
                 antigo_a = undefined
-            
+
             } else if (acao.indexOf('R') != -1) {
-    
+
                 numero_regra = acao.split('R')[1]
                 tamanho_producao = producoes_gramatica[numero_regra].length - 1
                 nao_terminal = producoes_gramatica[numero_regra][0]
@@ -135,33 +135,38 @@ function analiseLR() {
                 aplicar_regra_semantica(parseInt(numero_regra, 10), nao_terminal)
 
                 // Desempilhar simbolos |B| da pilha de estados e de atributos
-                for(i=0; i< tamanho_producao; i++){
+                for (i = 0; i < tamanho_producao; i++) {
                     removeElementoPilha(pilha_estados)
                     removeElementoPilha(pilha_atributos)
                 }
-               
+
                 s = topoPilha(pilha_estados)
-    
+
                 novo_estado = tabela_sintatica[[s, producoes_gramatica[numero_regra][0]]]
-                
-                insereElementoPilha(pilha_estados,novo_estado)
-                insereElementoPilha(pilha_atributos,nao_terminal)
-                
+
+                insereElementoPilha(pilha_estados, novo_estado)
+                insereElementoPilha(pilha_atributos, nao_terminal)
+
                 log_producoes(producoes_gramatica[numero_regra])
-            
+
             } else if (acao == 'ACCEPT') {
+                if (flag_erro) {
+                    document.getElementById('dwn-btn').disabled = false;
+                }
                 return
             }
 
-        }else {
+        } else {
             // Tratamento e recuperação de erros
             antigo_a = a
             a = tabela_recuperacao_erros_sintaticos[s]
 
             log_erros(tabela_erros_sintaticos[s])
-            
+
         }
 
     }
+
+
 }
 
