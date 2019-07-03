@@ -1,4 +1,5 @@
 function aplicar_regra_semantica(numero_regra, nao_terminal) {
+
     switch (numero_regra) {
         case 1:
             break;
@@ -48,16 +49,12 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
                         break;
                 }
 
-            } else {/*“Erro: Variável não declarada”*/
-
+            } else {
+                log_erros("ERRO SEMÂNTICO: Variável " + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 2]][0] + " não declarada ")
             }
 
             break;
         case 12:
-
-        console.log('Regra 12')
-        console.log(pilha_atributos)
-
             if (tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][1] == 'id') {
 
                 switch (tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2]) {
@@ -90,23 +87,26 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
             break;
         case 15:
 
-            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]] != undefined) {
+            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]] != undefined && tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]][2] != '-') {
 
                 tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]]
 
             } else { /* Emitir na tela “Erro: Variável não declarada”. */
-
+                log_erros("ERRO SEMÂNTICO: Variável " + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]][0] + " não declarada ")
             }
 
             break;
         case 16:
             break;
         case 17:
+            console.log('Regra 17')
+            console.log(pilha_atributos)
 
-            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]] != undefined) {
+            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]] != undefined && tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][2] != '-') {
 
                 /* Verificando se os tipos do id da pilha e de LD sao os mesmos */
-                if (pilha_atributos[pilha_atributos.length - 4][2] == pilha_atributos[pilha_atributos.length - 2][2]) {
+                
+                if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][2] == tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2]) {
 
                     add_codigo_objeto(tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][0] + ''
                         + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][2] + ''
@@ -114,10 +114,11 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
 
                 } else { /*Caso contrário emitir:”Erro: Tipos diferentes para atribuição”. */
 
+                    log_erros("ERRO SEMÂNTICO:  Tipos diferentes para atribuição\n " + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][0] + "<-" + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]])
                 }
 
             } else {/* Caso contrário emitir “Erro: Variável não declarada”. */
-
+                log_erros("ERRO SEMÂNTICO: Variável " + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][0] + " não declarada ")
             }
 
             break;
@@ -132,16 +133,18 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
                 add_codigo_objeto(tabela_de_simbolos_geral[nao_terminal][0] + '=' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][0] + '' +
                     tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2] + '' + tabela_de_simbolos_geral['OPRD1'][0] + ';\n')
 
-                tabela_de_simbolos_geral['OPRD1'] = ['-', '-', '-']
-
+                //tabela_de_simbolos_geral['OPRD1'] = ['-', '-', '-']
 
             } else {//Caso contrário emitir “Erro: Operandos com tipos incompatíveis”
 
+                log_erros("ERRO SEMÂNTICO: Operandos com tipos incompatíveis para '" + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2] +
+                    "' (" + tabela_de_simbolos_geral['OPRD'][2] + " e " + tabela_de_simbolos_geral['OPRD1'][2] + ") ")
             }
 
             break;
         case 19:
-
+            //console.log('Regra 19')
+            //console.log(tabela_de_simbolos_geral)
             if (tabela_de_simbolos_geral['OPRD1'][0] == '-') {
                 tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 1]]
             } else {
@@ -151,11 +154,12 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
             break;
         case 20:
 
-            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]] != undefined) {
+            if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]] != undefined && tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]][2] != '-') {
                 tabela_de_simbolos_geral[nao_terminal] = tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]]
 
             } else {//Caso contrário emitir “Erro: Variável não declarada”
-
+                console.log('Regra 20')
+                log_erros("ERRO SEMÂNTICO: Variável " + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]][0] + " não declarada ")
             }
 
             break;
@@ -179,6 +183,8 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
             break;
         case 25:
 
+            console.log('Regra 25')
+            console.log(tabela_de_simbolos_geral)
             if (tabela_de_simbolos_geral['OPRD'][2] == tabela_de_simbolos_geral['OPRD1'][2]) {
 
                 tabela_de_simbolos_geral[nao_terminal][0] = 'T' + cont_variaveis_temporarias
@@ -187,9 +193,11 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
                 add_codigo_objeto(tabela_de_simbolos_geral[nao_terminal][0] + '=' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][0] + '' +
                     tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2] + '' + tabela_de_simbolos_geral['OPRD1'][0] + ';\n')
 
-                tabela_de_simbolos_geral['OPRD1'] = ['-', '-', '-']
+                //tabela_de_simbolos_geral['OPRD1'] = ['-', '-', '-']
 
             } else {//Caso contrário emitir “Erro: Operandos com tipos incompatíveis”
+                log_erros("ERRO SEMÂNTICO: Operandos com tipos incompatíveis para '" + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][0] +
+                    "' (" + tabela_de_simbolos_geral['OPRD'][2] + " e " + tabela_de_simbolos_geral['OPRD1'][2] + ") ")
 
             }
 
@@ -207,7 +215,6 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
         case 31:
             break;
         case 32:
-    
             add_codigo_objeto('}\n')
             break;
         case 33:

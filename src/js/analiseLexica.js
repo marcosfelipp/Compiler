@@ -65,7 +65,7 @@ function recomple() {
 
 function log_erros(erro) {
     texto = document.getElementById("log_erro").value
-    texto += erro + " na linha " + linha + "\n"
+    texto += erro + ", linha " + linha + "\n"
     document.getElementById("log_erro").value = texto
 }
 
@@ -118,7 +118,7 @@ function verifica_tipo(lexema, token) {
         }
     }
     else {
-        return token
+        return '-'
     }
 }
 
