@@ -780,7 +780,7 @@ var pilha_atributos = []
 var cont_variaveis_temporarias = 0
 var codigo_objeto = ''
 
-var flag_erro = true
+var flag_erro = false
 
 //Preenchendo tabela de nao terminais inicialmente 
 for(k in producoes_gramatica ){

@@ -69,7 +69,7 @@ function log_erros(erro) {
     texto += erro + ", linha " + l + "\n"
     document.getElementById("log_erro").value = texto
 
-    flag_erro = false;
+    flag_erro = true;
 }
 
 function automato(string_lida) {
@@ -94,7 +94,7 @@ function automato(string_lida) {
                 state = undefined
             }
         } else {
-            if (dic[string_lida[i]] == undefined && string_lida[i] != "\n" && string_lida[i] != "$") {
+            if (dic[string_lida[i]] == undefined && string_lida[i] != "\n" && string_lida[i] != "$" && string_lida[i].length < 2) {
                 log_erros("ERRO LEXICO " + string_lida[i])
             }
         }
@@ -114,10 +114,11 @@ function verifica_tipo(lexema, token) {
         return '='
     } else if (token == 'Num') {
 
-        if(lexema % 1 === 0){
-            return 'int'
-        }else{
+        if (lexema.includes('.')){
             return 'double'
+        }
+        else{
+            return 'int'
         }
     }
     else {

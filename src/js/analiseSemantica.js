@@ -77,8 +77,6 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
         case 13:
 
             tabela_de_simbolos['1' + nao_terminal] = automato(pilha_atributos[pilha_atributos.length - 1])
-            //console.log(tabela_de_simbolos[nao_terminal])
-
             break;
         case 14:
 
@@ -99,15 +97,10 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
         case 16:
             break;
         case 17:
-            console.log('Regra 17')
-            console.log(pilha_atributos)
-            
-
+         
             if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]] != undefined && tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][2] != '-') {
 
                 /* Verificando se os tipos do id da pilha e de LD sao os mesmos */
-                console.log(tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]] +'  '+tabela_de_simbolos['1'+pilha_atributos[pilha_atributos.length - 2]])
-
 
                 if (tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 4]][2] == tabela_de_simbolos['1'+pilha_atributos[pilha_atributos.length - 2]][2]) {
 
@@ -146,8 +139,6 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
 
             break;
         case 19:
-            console.log('Regra 19')
-            console.log(tabela_de_simbolos)
 
             if (tabela_de_simbolos['1OPRD1'][0] == '-') {
                 tabela_de_simbolos['1'+nao_terminal] = tabela_de_simbolos['1'+pilha_atributos[pilha_atributos.length - 1]]
@@ -162,7 +153,6 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
                 tabela_de_simbolos['1'+nao_terminal] = tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]]
 
             } else {//Caso contrário emitir “Erro: Variável não declarada”
-                console.log('Regra 20')
                 log_erros("ERRO SEMÂNTICO: Variável " + tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 1]][0] + " não declarada ")
             }
 
@@ -171,7 +161,7 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
 
             /* Necessida de criar um novo OPRD para nao ocorrer erro */
             if (tabela_de_simbolos['1'+nao_terminal] != ['-', '-', '-']) {
-                tabela_de_simbolos['1'+nao_terminal + '1'] = automato([pilha_atributos[pilha_atributos.length - 1]])
+                tabela_de_simbolos['1'+nao_terminal + '1'] = automato(pilha_atributos[pilha_atributos.length - 1])
             }
 
             break;
@@ -192,10 +182,6 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
 
                 tabela_de_simbolos['1'+nao_terminal][0] = 'T' + cont_variaveis_temporarias
                 cont_variaveis_temporarias++
-                
-                //console.log('Regra 25')
-               // console.log(pilha_atributos)
-                //console.log(tabela_de_simbolos['1'+pilha_atributos[pilha_atributos.length - 2]])
 
                 add_codigo_objeto(tabela_de_simbolos['1'+nao_terminal][0] + '=' + tabela_de_simbolos['1'+pilha_atributos[pilha_atributos.length - 3]][0] + '' +
                     tabela_de_simbolos[pilha_atributos[pilha_atributos.length - 2]][2] + '' + tabela_de_simbolos['1OPRD1'][0] + ';\n')
