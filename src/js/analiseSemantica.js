@@ -55,6 +55,9 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
             break;
         case 12:
 
+        console.log('Regra 12')
+        console.log(pilha_atributos)
+
             if (tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][1] == 'id') {
 
                 switch (tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 2]][2]) {
@@ -204,9 +207,12 @@ function aplicar_regra_semantica(numero_regra, nao_terminal) {
         case 31:
             break;
         case 32:
+    
+            add_codigo_objeto('}\n')
             break;
         case 33:
-            add_codigo_objeto('while(' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 3]][0] + '){\n')
+            add_codigo_objeto('while(' + tabela_de_simbolos_geral[pilha_atributos[pilha_atributos.length - 4]][0] + '){\n')
+            break;
         case 34:
             break;
         case 35:
