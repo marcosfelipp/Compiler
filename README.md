@@ -1,4 +1,5 @@
 # Compiler
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 Compilador desenvolvido em Javascript que faz a compilação da linguagem Mgol e gera uma código fonte na linguagem C.
 
