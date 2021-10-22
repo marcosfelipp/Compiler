@@ -1,29 +1,29 @@
 <html>
 
 <head>
-    <title>Compilador Mgol</title>
+    <title>Mgol Compiler</title>
     <meta charset="UTF8" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 
 <body>
     <center>
-        <h2>Compilador Mgol</h2>
+        <h2>Mgol Compiler</h2>
         <hr>
     </center>
     <div class="container">
         <form>
             <div class="form-group">
-                <label>Inserir arquivo para compilar:</label>
+                <label>Insert the file to compile:</label>
                 <input type="file" class="form-control-file" onchange='readProg(this)' />
             </div>
 
             <div class="form-group">
-                <button type="button" class="btn btn-primary" id="sendFile" onclick="compilar()">Compilar!</button>
+                <button type="button" class="btn btn-primary" id="sendFile" onclick="compilar()">Compile!</button>
             </div>
 
             <!-- <textarea id="text-val" rows="4">This is the content of my file</textarea><br /> -->
-            <input type="button" disabled=true id="dwn-btn" value="Download PROGRAMA.C" />
+            <input type="button" disabled=true id="dwn-btn" value="Download program.C" />
             
             <br/>
             <br/>
@@ -35,13 +35,12 @@
         </form>
 
         <div class="form-group">
-            <label for="exampleFormControlTextarea3"><span class="badge badge-pill badge-danger">ERROS:</span></label>
+            <label for="exampleFormControlTextarea3"><span class="badge badge-pill badge-danger">ERRORS:</span></label>
             <textarea class="form-control" id="log_erro" rows="7"></textarea>
         </div>
 
         <div class="form-group">
-            <label for="exampleFormControlTextarea3"><span class="badge badge-pill badge-success">Produções
-                    reduzidas:</span></label>
+            <label for="exampleFormControlTextarea3"><span class="badge badge-pill badge-success"> Lexemas and Tokens:</span></label>
             <textarea class="form-control" id="log_producoes" rows="7"></textarea>
         </div>
 
